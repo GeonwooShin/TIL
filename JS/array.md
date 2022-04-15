@@ -134,3 +134,110 @@ console.log(arrayLike2); // ['H', 'i']
 만약 length에 맞지 않는 요소가 있다면 해당 요소를 `undefined`로 채운다.
 
 ---
+
+## **배열 요소 참조**
+
+자바스크립트 배열은 인덱스가 **프로퍼티 키**의 역할을 한다고 설명했다.
+
+또한, 배열의 프로퍼티 값. 즉, 요소를 참조하기 위해서는 대괄호 표기법을 사용해야 한다.
+
+```js
+const arr = ["banana", "grape", "orange"];
+
+console.log(arr[0]); // 프로퍼티 키 0으로, 프로퍼티 값 'banana' 획득
+```
+
+만약 존재하지 않는 요소에 접근한다면 `undefined`를 반환한다.
+
+```js
+const arr = ["banana", "grape", "orange"];
+
+console.log(arr[3]); // 인덱스가 3인 요소는 존재하지 않는다.
+```
+
+---
+
+## **배열 요소 추가**
+
+### **요소 추가**
+
+배열에는 요소를 동적으로 추가하는 것이 가능하다.
+
+존재하지 않는 인덱스에 값을 할당하게 되면, 새로운 요소가 추가되도록 동작한다.
+
+이 때 length 프로퍼티의 값은 자동으로 갱신된다.
+
+```js
+const arr = [];
+
+console.log(arr); // []
+console.log(arr.length); // 0
+
+arr[0] = "cherry";
+
+console.log(arr); // ['cherry']
+console.log(arr.length); // 1
+```
+
+이 때, 배열의 프로퍼티인 `length`보다 더 큰 인덱스에 값을 할당하게되면, 희소 배열이 된다.
+
+```js
+const fruit = ["cherry", "kiwi"];
+
+fruit[3] = "banana";
+
+console.log(fruit); // ['cherry', 'kiwi', empty, 'banana']
+```
+
+### **요소 값 재할당**
+
+이미 인덱스에 요소가 존재할 때, 요소에 값을 재할당한다면 요소의 값이 재할당한 값으로 갱신된다.
+
+```js
+const arr = [];
+
+arr[0] = "banana";
+
+console.log(arr[0]); // banana
+
+arr[0] = "cherry";
+
+console.log(arr[0]); // cherry
+```
+
+이 때, 배열에 요소를 추가하거나 값을 재할당 하기위해서는 반드시 인덱스 값을 사용해야하지만
+
+정수이외의 값은 인덱스로 사용하게되면, 요소가 아닌 프로퍼티를 생성하거나 재할당하게된다.
+
+```js
+const fruit = ["banana", "kiwi", "orange"];
+
+fruit[3] = "cherry"; // 새로운 요소 추가
+fruit["0"] = "grape"; // 기존 요소값 갱신
+
+fruit[5.5] = "5.5"; // 정수가 아닌 수를 인덱스로 사용
+fruit["hello"] = "hello"; // 문자열을 인덱스로 사용
+fruit.hi = "hi";
+console.log(fruit); // ['grape', 'kiwi', 'orange', 'cherry', 5.5: '5.5', hello: 'hello', hi: 'hi']
+```
+
+---
+
+## **배열 요소 삭제**
+
+배열은 객체이기 때문에 특정 요소 삭제를 위해서 `delete` 연산자를 사용할 수 있다.
+
+```js
+const fruit = ["banana", "kiwi", "orange"];
+
+delete fruit[2]; // 인덱스 2의 요소를 삭제
+
+console.log(fruit); // ['banana', 'kiwi', empty]
+console.log(fruit[2]); // undefined
+```
+
+배열 요소를 삭제한다해도 배열의 `length` 프로퍼티에는 영향을 주지 않기 때문에 희소 배열이 된다.
+
+따라서 해당 `delete` 연산자를 사용하는 대신 프로토타입 메서드인 splice()를 사용한다. 해당 메서드는 뒤에서 자세히 다뤄보자.
+
+---
