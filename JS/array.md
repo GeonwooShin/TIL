@@ -241,3 +241,116 @@ console.log(fruit[2]); // undefined
 따라서 해당 `delete` 연산자를 사용하는 대신 프로토타입 메서드인 splice()를 사용한다. 해당 메서드는 뒤에서 자세히 다뤄보자.
 
 ---
+
+## **배열 메서드**
+
+배열은 정적 메서드와 프로토타입 메서드를 제공한다.
+
+배열 메서드는 원본 배열을 직접 변경하거나, 직접 변경하지않고 새로운 배열을 반환하는 메서드로 나뉜다.
+
+원본 배열을 직접 변경하는 메서드는 되도록 사용하지 않는 편이 좋다.
+
+### **1. Array.isArray**
+
+이 메서드는 정적 메서드이고, 전달된 인수가 배열인지 아닌지에 따라 `true` 또는 `false` 값을 반환한다.
+
+```js
+const arr = [];
+
+console.log(Array.isArray(arr)); // true
+console.log(Array.isArray([])); // true
+console.log(Array.isArray(new Array())); // true
+
+console.log(Array.isArray()); // false
+console.log(Array.isArray({})); // false
+console.log(Array.isArray(null)); // false
+console.log(Array.isArray(undefined)); // false
+console.log(Array.isArray(1)); // false
+console.log(Array.isArray("Hello")); // false
+```
+
+---
+
+### **2. Array.prototype.indexOf**
+
+이 메서드는 프로토타입 메서드로, 인수로 전달된 요소를 해당 배열에서 검색하여 인덱스를 반환한다.
+
+만약 인수로 전달된 요소가 배열에 여러개 있다면, 첫번째로 검색된 인덱스를 반환한다.
+
+인수로는 두개를 전달할 수 있는데, 첫 번째 인수는 검색할 요소, 두 번째 인수는 검색을 시작할 인덱스를 의미한다.
+
+인수로 전달한 요소가 해당 배열에 존재하지 않는다면, `-1`을 반환한다.
+
+```js
+const user = ["Thomas", "Jake", "Jennie", "Hooper", "Gary", "Jake"];
+
+console.log(user.indexOf("Gary")); // 4
+console.log(user.indexOf("Jake")); // 1
+console.log(user.indexOf("Bryan")); // -1
+```
+
+---
+
+### **3. Array.prototype.push**
+
+이 메서드는 전달받은 인수를 배열 마지막에 요소로 추가하는 메서드이며, 변경된 `length` 값을 반환한다.
+
+```js
+const fruit = ["banana", "cherry", "melon"];
+
+fruit.push("kiwi", "grape");
+
+console.log(fruit); // ['banana', 'cherry', 'melon', 'kiwi', 'grape']
+```
+
+이 메서드는 원본 배열을 직접 변경하기 때문에 성능면에서는 좋지않다.
+
+따라서 원본 배열을 직접 변경하지 않고 새로운 배열을 생성하는 [스프레드 문법](https://github.com/GeonwooShin/TIL/blob/master/JS/spreadSyntax.md)을 사용하는 것이 좋다.
+
+---
+
+### **4. Array.prototype.pop**
+
+pop 메서드 또한 원본 배열을 조작하는 메서드로 해당 배열의 마지막 요소를 제거하고 해당 요소를 반환한다.
+
+```js
+const fruit = ["banana", "cherry", "kiwi", "grape", "melon"];
+
+console.log(fruit.pop()); // melon
+
+console.log(fruit); // ['banana', 'cherry', 'kiwi', 'grape']
+```
+
+---
+
+### **5. Array.prototype.unshift**
+
+unshift 메서드 또한 원본 배열을 조작하는 메서드로, 전달받은 인수를 배열의 맨 앞부터 요소로 추가한다.
+
+메서드의 반환 값으로는 변경된 `length` 프로퍼티를 반환한다.
+
+```js
+const fruit = ["banana", "cherry"];
+
+console.log(fruit.unshift("kiwi", "grape", "melon")); // 5
+
+console.log(fruit); // ['kiwi', 'grape', 'melon', 'banana', 'cherry']
+```
+
+---
+
+### **6. Array.prototype.shift**
+
+shift 메서드 또한 원본 배열을 조작하는 메서드로, 배열의 첫 요소를 제거하는 메서드이다.
+
+메서드는 제거된 요소를 반환하고, 빈배열에 메서드를 사용했다면 반환값으로는 `undefined`가 반환된다.
+
+```js
+const fruit = ["banana", "cherry", "kiwi", "grape", "melon"];
+
+console.log(fruit.shift()); // banana
+
+console.log(fruit); // ['cherry', 'kiwi', 'grape', 'melon']
+```
+
+---
