@@ -354,3 +354,40 @@ console.log(fruit); // ['cherry', 'kiwi', 'grape', 'melon']
 ```
 
 ---
+
+### **7. Array.prototype.concat**
+
+concat 메서드는 새로운 배열을 반환하는 메서드로, 원본 배열은 변경되지 않는다.
+
+인수로 전달된 값은 원본배열에 마지막에 추가되어 그 상태로 새로운 배열을 반환한다.
+
+```js
+const fruit = ["banana", "cherry"];
+
+const newFruit = fruit.concat("peach");
+
+console.log(newFruit); // ['banana', 'cherry', 'peach']
+console.log(fruit); // ['banana', 'cherry']
+```
+
+만약 `concat()` 메서드의 인수로 특정 값이 아닌 배열을 전달한 경우 인수로 전달한 배열을 해체하여 새로운 배열의 요소로 추가한다.
+
+```js
+const fruit1 = ["banana", "cherry"];
+const fruit2 = ["grape", "pear"];
+
+const newFruit = fruit1.concat(fruit2); // 배열 전달
+
+console.log(newFruit); // ['banana', 'cherry', 'grape', 'pear']
+```
+
+`concat()` 메서드는 [스프레드 문법](https://github.com/GeonwooShin/TIL/blob/master/JS/spreadSyntax.md)으로 대체 가능하다.
+
+```js
+const fruit1 = ["banana", "cherry"];
+const fruit2 = ["grape", "pear"];
+
+const newFruit = [...fruit1, ...fruit2];
+
+console.log(newFruit); // ['banana', 'cherry', 'grape', 'pear']
+```
