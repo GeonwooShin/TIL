@@ -391,3 +391,62 @@ const newFruit = [...fruit1, ...fruit2];
 
 console.log(newFruit); // ['banana', 'cherry', 'grape', 'pear']
 ```
+
+### **8. Array.prototype.slice**
+
+slice 메서드는 인수로 전달된 범위의 요소들을 복사하여 배열로 반환하고 원본배열을 변경하지 않는다.
+
+slice 메서드의 매개변수의 첫번째로 복사를 시작할 인덱스, 두번째로 복사를 종료할 인덱스를 받는다.
+
+여기서 두번쨰로 전달받는 매개변수의 인덱스는 배열의 복사에 포함되지 않는다.
+
+```js
+const fruitsArr = ["grape", "banana", "strawberry", "melon"];
+
+const newFruitsArr = fruitsArr.slice(0, 1); // 0 부터 1의 전까지
+
+console.log(newFruitsArr); // ['grape']
+```
+
+만약에 메서드로 두번째 매개변수를 전달하지 않는다면 기본 값으로 `length` 프로퍼티가 전달된다.
+
+```js
+const fruitsArr = ["grape", "banana", "strawberry", "melon"];
+
+const newFruitsArr = fruitsArr.slice(0);
+
+console.log(newFruitsArr); // ['grape', 'banana', 'strawberry', 'melon']
+```
+
+메서드의 첫번째 매개변수에 음수가 전달된다면 배열의 끝에서 부터의 인덱스를 나타낸다.
+
+```js
+const fruitsArr = ["grape", "banana", "strawberry", "melon"];
+
+const newFruitsArr = fruitsArr.slice(-3);
+
+console.log(newFruitsArr);
+```
+
+따라서 위의 예제는 배열의 끝에서부터 요소를 세 개 복사하여 반환한다.
+
+slice 메서드에 인수를 전달하지 않는다면, 원본배열 그대로를 복사하여 반환하게 되는데 이 때 생성된 복사본은 얕은 복사를 통해 생성되는 배열이다.
+
+```js
+const fruitsArr = ["grape", "banana", "strawberry", "melon"];
+
+const newFruitsArr = fruitsArr.slice();
+
+console.log(newFruitsArr);
+
+console.log(fruitsArr === newFruitsArr); // false
+
+console.log(fruitsArr[0]); // grape
+console.log(newFruitsArr[0]); // grape
+newFruitsArr[0] = "kiwi";
+
+console.log(fruitsArr[0]); // grape
+console.log(newFruitsArr[0]); // kiwi
+
+console.log(fruitsArr[0] === newFruitsArr[0]); // true
+```
