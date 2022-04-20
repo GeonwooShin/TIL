@@ -450,3 +450,122 @@ console.log(newFruitsArr[0]); // kiwi
 
 console.log(fruitsArr[0] === newFruitsArr[0]); // true
 ```
+
+### **9. Array.prototype.join**
+
+`join` 메서드는 배열의 모든 요소를 문자열로 반환한 후 요소사이에 인수로 연결한 문자열을 반환하는 메서드이다.
+
+인수로 아무것도 전달하지 않는다면 기본값은 `,` 이다.
+
+**메서드의 반환값은 구분자로 연결한 문자열이다.**
+
+```js
+const fruit = ["banana", "grape", "cherry"];
+
+console.log(fruit); // ['banana', 'grape', 'cherry']
+
+console.log(fruit.join()); // banana,grape,cherry
+
+console.log(fruit.join(":")); // banana:grape:cherry
+```
+
+---
+
+### **10. Array.prototype.reverse**
+
+`reverse` 메서드는 원본 배열의 순서를 반대로 뒤집는 메서드이며, **_이 때 원본 배열이 변경된다._**
+
+반환값은 변경된 배열이다.
+
+```js
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+console.log(arr); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+const newArr = arr.reverse();
+
+console.log(newArr); // [9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+console.log(arr); // [9, 8, 7, 6, 5, 4, 3, 2, 1]
+```
+
+---
+
+### **11. Array.prototype.fill**
+
+`fill` 메서드는 **fill(넣을 값, 여기부터, 여기전까지)** 로 작동하는 메서드이다.
+
+인수로 전달 받은 값을 채우는 배열 프로토타입 함수이다.
+
+**_이 메서드 또한, 원본 배열을 변경한다._**
+
+```js
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+arr.fill(0); // 인수로 전달받은 값을 배열의 처음부터 끝까지 해당 요소로 채운다.
+
+console.log(arr); // [0, 0, 0, 0, 0, 0, 0, 0, 0]
+```
+
+인수로 넣을 값만 전달한다면 위의 예제와 같이 해당 전달받은 인수로 배열을 모두 바꿔 채운다.
+
+```js
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+arr.fill(0, 4); //
+
+console.log(arr); // [1, 2, 3, 4, 0, 0, 0, 0, 0]
+```
+
+인수로 넣을 값과 시작할 인덱스 값을 같이 전달한다면, 시작할 인덱스부터 끝까지 첫번째 인수로 전달한 값으로 요소를 채운다.
+
+```js
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+arr.fill(0, 4, 6);
+
+console.log(arr); // [1, 2, 3, 4, 0, 0, 7, 8, 9]
+```
+
+인수로 넣을 값, 시작할 인덱스, 종료할 인덱스로 인수를 모두 전달한다면  
+종료할 인덱스 이전까지(즉, 종료할 인덱스는 포함하지 않는다) 인수로 전달한 값으로 요소를 채운다.
+
+---
+
+### **12. Array.prototype.includes**
+
+`includes` 메서드는 배열 내에 인수로 넘겨준 요소가 존재하는지 검사하는 메서드이다.
+
+첫 번째 인수로는 검색할 요소의 값을 넘겨주고, 두 번째 인수로는 검색을 시작할 인덱스를 지정해준다.
+
+```js
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+console.log(arr.includes(2)); //  true
+console.log(arr.includes(2, 3)); // false
+```
+
+이 메서드는 `indexOf` 메서드 보다 효율적인 메서드이다.
+
+---
+
+### **13. Array.prototype.flat**
+
+`flat` 메서드는 중첩 배열을 평탄화 해주는 메서드이다.
+
+인수로는 중첩 배열을 평탄화 할 깊이가 들어간다. 인수로 `Infinity` 를 전달한다면 중첩 배열 모두를 평탄화 한다.
+
+```js
+const arr = [1, 2, [3, 4, 5, [6, 7, 8, [9]]]];
+
+console.log(arr.flat()); // [1, 2, 3, 4, 5, Array(4)]
+console.log(arr.flat(Infinity)); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+
+위의 예제처럼 인수를 전달하지 않으면 기본 값이 `1`로 지정되어있고,
+
+인수로 `Infinity` 를 전달한다면 중첩 배열 모두를 평탄화 한다.
+
+---
+
+## **배열 고차 함수**
