@@ -569,3 +569,81 @@ console.log(arr.flat(Infinity)); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
 ---
 
 ## **배열 고차 함수**
+
+고차함수라는 것은 함수를 인수로 전달받는 함수 또는 함수를 반환하는 함수를 의미한다.
+
+### **1. Array.prototype.sort**
+
+`sort` 메서드는 배열을 정렬하는 메서드이고, 기본적으로 오름차순으로 정렬이 이루어진다.
+
+`sort` 메서드는 원본 배열을 직접변경하고, 반환값은 정렬된 배열이다.
+
+```js
+const fruit = ["grape", "melon", "apple", "banana"];
+
+console.log(fruit.sort()); // ['apple', 'banana', 'grape', 'melon']
+
+console.log(fruit); // ['apple', 'banana', 'grape', 'melon']
+```
+
+`sort` 메서드는 영어 뿐만 아니라 한글도 오름차순을 적용가능하다.
+
+```js
+const fruit = ["포도", "사과", "감", "레몬"];
+
+console.log(fruit.sort()); // ['감', '레몬', '사과', '포도']
+
+console.log(fruit); // ['감', '레몬', '사과', '포도']
+```
+
+만약, `sort` 메서드를 내림차순으로 정렬하고 싶다면 `reverse` 메서드를 사용하여 `sort` 메서드로 오름차순 정렬한 배열을 뒤집으면 된다.
+
+```js
+const fruit = ["grape", "melon", "apple", "banana"];
+
+console.log(fruit.sort().reverse()); // ['melon', 'grape', 'banana', 'apple']
+
+console.log(fruit); // ['melon', 'grape', 'banana', 'apple']
+```
+
+하지만, 숫자 요소를 정렬할 때는 `sort` 메서드에 인수로 비교 함수를 전달해야만 한다.
+
+이 때, 비교 함수는 양수, 음수, 0 중에 하나를 반환해야만 하고
+
+비교 함수의 반환 값이 0 보다 작으면 비교함수의 첫번째 인수를 우선하여 정렬하고
+
+0이면 정렬하지 않고, 0 보다 크면 두번째 인수를 우선하여 정렬한다.
+
+```js
+const arr = [31, 24, 25, 1, 22, 9, 10, 2];
+
+arr.sort((a, b) => a - b); // // 숫자 요소 오름차순 정렬
+
+console.log(arr); // [1, 2, 9, 10, 22, 24, 25, 31]
+
+arr.sort((a, b) => b - a); // 숫자 요소 내림차순 정렬
+
+console.log(arr); // [31, 25, 24, 22, 10, 9, 2, 1]
+```
+
+그렇다면, 객체를 요소로 갖는 배열을 정렬하기 위해서는 어떤 과정을 거쳐야할까?
+
+```js
+const arr = [
+  { name: "Adam", age: 25 },
+  { name: "Harry", age: 12 },
+  { name: "John", age: 41 },
+  { name: "Thomson", age: 33 },
+  { name: "Steve", age: 65 },
+];
+
+function compare(key) {
+  return (a, b) => (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0);
+}
+
+arr.sort(compare("age"));
+
+console.log(arr);
+```
+
+위와 같이 정의한 메서드를 `sort` 메서드의 인수인 비교 함수로 전달하게되면 키 값인 `age` 로 객체가 정렬되는 것을 알 수 있다.
