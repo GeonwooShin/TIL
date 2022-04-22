@@ -647,3 +647,77 @@ console.log(arr);
 ```
 
 위와 같이 정의한 메서드를 `sort` 메서드의 인수인 비교 함수로 전달하게되면 키 값인 `age` 로 객체가 정렬되는 것을 알 수 있다.
+
+---
+
+### **2. Array.prototype.forEach**
+
+`forEach` 메서드는 반복문 `for`을 대체할 수 있는 고차 함수로써, 반복문을 활용하기 위해 변수를 선언해야하는 `for`과 달리 배열의 모든 요소를 순회하면서 콜백 함수를 반복적으로 수행하는 함수이다.
+
+```js
+const arr = [1, 2, 3, 4, 5];
+
+const doubleArr = [];
+
+arr.forEach((item) => {
+  doubleArr.push(item * 2);
+});
+
+console.log(doubleArr); // [2, 4, 6, 8, 10]
+```
+
+위 처럼 `arr` 배열의 요소 5개를 모두 순회하면서 새로운 배열 `doubleArr`에 요소의 두배인 요소들을 삽입하도록 구현할 수 있다.
+
+`forEach` 메서드는 콜백함수를 호출할 때 `forEach`를 호출한 배열의 요소값과 인덱스, `forEach` 메서드를 호출한 배열(this)를 순차적으로 전달한다.
+
+```js
+const arr = [1, 2, 3, 4, 5];
+
+arr.forEach((item, index, array) => {
+  console.log(
+    `현재 요소 값: ${item}, 현재 인덱스: ${index}, this: ${JSON.stringify(
+      array
+    )}`
+  );
+});
+```
+
+위 코드의 출력 결과는 다음과 같다.
+
+```
+현재 요소 값: 1, 현재 인덱스: 0, this: [1,2,3,4,5]
+현재 요소 값: 2, 현재 인덱스: 1, this: [1,2,3,4,5]
+현재 요소 값: 3, 현재 인덱스: 2, this: [1,2,3,4,5]
+현재 요소 값: 4, 현재 인덱스: 3, this: [1,2,3,4,5]
+현재 요소 값: 5, 현재 인덱스: 4, this: [1,2,3,4,5]
+```
+
+또한, `forEach` 메서드는 원본 배열을 변경하지 않지만, 직접 원본 배열을 조작하여 변경하는 것이 가능하다.
+
+```js
+const arr = [1, 2, 3, 4, 5];
+
+arr.forEach((item, index, array) => {
+  array[index] = item * 2;
+});
+
+console.log(arr); // [2, 4, 6, 8, 10]
+```
+
+`for` 반복문은 희소배열의 존재하지 않는 요소를 포함하지만,
+
+`forEach` 메서드는 희소배열에 있어 존재하지 않는 요소는 순회 대상에 포함하지 않는다.
+
+```js
+const arr = [1, , 3, , 5];
+
+for (let i = 0; i < arr.length; i++) {
+  console.log(arr[i]); // 1, undefined, 3, undefined, 5
+}
+
+arr.forEach((item) => {
+  console.log(item); // 1, 3, 5
+});
+```
+
+---
