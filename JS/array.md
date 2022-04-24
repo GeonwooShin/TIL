@@ -778,3 +778,49 @@ console.log(arr2); // [2, 4]
 그리고, `filter` 메서드는 `forEach`, `map` 메서드와 마찬가지로 콜백 함수에 요소값, 인덱스, 배열을 전달받을 수 있다.
 
 ---
+
+### **5. Array.prototype.reduce**
+
+`reduce` 메서드는 배열의 모든 요소를 순회하면서 전달받은 콜백함수는 반복적으로 호출한다.
+
+또한, 콜백 함수의 반환값을 다음 순회에 콜백 함수의 첫번째 인수로 전달해 결과값을 만들어 반환한다.
+
+따라서 `reduce` 메서드는 **_하나의 결과값을 반환_**하며, 원본 배열을 변경하지 않는다.
+
+`reduce` 메서드는 다음과 같이 콜백에 4개의 인수가 전달될 수 있다. 만약 배열의 요소가 5개라면
+
+`reduce` 메서드를 총 5회 호출하게되는데 인수들의 변화는 다음과 같다
+
+|     구분      | accumulator | currentValue | index |    array    |        콜백함수의 반환값        |
+| :-----------: | :---------: | :----------: | :---: | :---------: | :-----------------------------: |
+|  첫번째 순회  |  0(초기값)  |      1       |   0   | [1,2,3,4,5] | 1 (accumulator + currentValue)  |
+|  두번째 순회  |      1      |      2       |   0   | [1,2,3,4,5] | 3 (accumulator + currentValue)  |
+|  세번째 순회  |      3      |      3       |   0   | [1,2,3,4,5] | 6 (accumulator + currentValue)  |
+|  네번째 순회  |      6      |      4       |   0   | [1,2,3,4,5] | 10 (accumulator + currentValue) |
+| 다섯번째 순회 |     10      |      5       |   0   | [1,2,3,4,5] | 15 (accumulator + currentValue) |
+
+```js
+const num = [1, 2, 3, 4, 5];
+
+const sum = num.reduce((acc, cur) => acc + cur, 0);
+
+console.log(sum); // 15
+```
+
+`reduce` 메서드의 두 번째 인수로 전달하는 초기값은 생략하는 것이 가능하지만, 객체의 특정 프로퍼티 값을 합산하는 경우에는 반드시 초기값이 필요하기 때문에 가능하면 초기값을 생략하지 않는것이 좋다.
+
+```js
+const myCart = [
+  { name: "computer", price: 700000 },
+  { name: "laptop", price: 1700000 },
+  { name: "keyboard", price: 120000 },
+  { name: "t-shirt", price: 35000 },
+  { name: "snack", price: 1200 },
+];
+
+const sum = myCart.reduce((acc, cur) => acc + cur.price, 0);
+
+console.log(sum); // 2556200
+```
+
+---
