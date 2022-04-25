@@ -824,3 +824,90 @@ console.log(sum); // 2556200
 ```
 
 ---
+
+### **6. Array.prototype.some**
+
+`some` 메서드는 요소를 순회하면서 전달된 콜백함수의 반환값이 단 한번이라도 참이면 `true` 모두 거짓이면 `false`를 반환하는 메서드이다.
+
+정리하면, 배열의 요소 중에 콜백함수를 통해 정의한 조건을 만족하는지에 따라 불리언 값을 반환한다.
+
+`forEach` `map` `filter` 메서드와 마찬가지로 콜백함수는 요소값, 인덱스, 해당 배열을 전달받을 수 있다.
+
+```js
+const num = [1, 2, 3, 4, 6];
+
+const result = num.some((item) => item > 5);
+
+console.log(result); // true
+```
+
+위 예제는 배열의 요소중에 5보다 큰 요소가 있는지를 검사하는 과정인데 단 하나의 요소가 5보다 크기때문에  
+반환값은 `true`이다.
+
+```js
+const num = [];
+
+const result = num.some((item) => item > 5);
+
+console.log(result); // false
+```
+
+만약 위와 같이 배열이 빈 배열이라면, 항상 `false`를 반환한다.
+
+---
+
+### **7. Array.prototype.every**
+
+`every` 메서드는 `some`과 비슷한 메서드지만, 살짝 다른 차이점이 존재한다.  
+`some` 메서드가 콜백함수의 반환값이 단 한번이라도 참이면 `true`를 반환하는 반면에  
+`every` 메서드는 요소를 순회하면서 콜백함수의 반환값이 모두 참이어야만 `true`를 반환한다.
+
+```js
+const num = [6, 7, 8, 9, 1];
+
+const result = num.every((item) => item > 5);
+
+console.log(result); // false
+```
+
+위 예제는 배열의 요소 중 단 하나의 값만 콜백함수의 반환값이 `false`인데도 불구하고 `false`를 반환한다.
+
+```js
+const num = [];
+
+const result = num.every((item) => item > 5);
+
+console.log(result); // true
+```
+
+만약 위와 같이 배열이 빈 배열이라면, 항상 `true`를 반환한다.
+
+---
+
+### **8. Array.prototype.find**
+
+`find` 메서드는 요소를 반환하는 메서드로, 인수로 전달된 콜백함수를 호출하여 반환값이 `true`인 첫 번째 요소를 반환한다.
+
+`forEach` `map` `filter` 메서드와 마찬가지로 콜백함수는 요소값, 인덱스, 해당 배열을 전달받을 수 있다.
+
+```js
+const product = [
+  { name: "melon", price: 5000 },
+  { name: "strawberry", price: 7000 },
+  { name: "grape", price: 4000 },
+  { name: "apple", price: 2500 },
+  { name: "kiwi", price: 4400 },
+];
+
+const fruit = product.find((item) => item.price === 4000);
+
+console.log(fruit); // {name: 'grape', price: 4000}
+```
+
+여기서 `filter` 메서드와 `find` 메서드와의 차이점은
+
+`filter` 메서드는 호출 결과가 `true`인 요소를 포함한 새로운 배열을 생성하여 반환한다는 것이고
+
+`find` 메서드는 호출 결과가 `true`인 **첫번째 요소만을 배열이 아닌 해당 요소 값을 반환**한다는 것이다.
+
+---
