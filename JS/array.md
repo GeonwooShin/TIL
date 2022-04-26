@@ -911,3 +911,63 @@ console.log(fruit); // {name: 'grape', price: 4000}
 `find` 메서드는 호출 결과가 `true`인 **첫번째 요소만을 배열이 아닌 해당 요소 값을 반환**한다는 것이다.
 
 ---
+
+### **9. Array.prototype.findIndex**
+
+`findIndex` 메서드는 `find` 메서드와 비슷한 메서드이지만 둘의 메서드는 차이점이 존재한다.
+
+`find` 메서드는 호출 결과가 `true`인 첫번쨰 요소의 값을 반환하는 메서드이지만
+
+`findIndex` 메서드는 호출 결과가 `true`인 첫번째 요소 값의 **_인덱스_**를 반환하는 메서드이다.
+
+```js
+const num = [4, 2, 16, 6, 5];
+
+const result = num.findIndex((item) => item > 5);
+
+console.log(result); // 2
+```
+
+콜백 함수의 조건(item > 5)을 만족하는 첫 번째 요소는 '16'이고 따라서 '16'의 인덱스인 2를 반환한다.
+
+---
+
+### **10. Array.prototype.flatMap**
+
+`flatMap` 메서드는 기존 `flat` 메서드와 `map` 메서드가 합쳐진 메서드라고 볼 수 있다.
+
+먼저 `map` 메서드를 수행 후 `flat` 메서드를 수행한 것으로 볼 수 있는데, 중첩 배열에 대해 `map`을 수행 후 평탄화 해주는 작업을 동시에 해주는 메서드 임을 알 수 있다.
+
+만약 `map` 메서드를 사용하여 배열의 요소들을 3개씩 요소로 추가하고 싶을 때를 가정해보자.
+
+```js
+const num = [1, 2, 3, 4, 5];
+
+const result = num.map((item) => [item, item, item]);
+
+console.log(result); // [Array(3), Array(3), Array(3), Array(3), Array(3)]
+```
+
+위 처럼 중첩 배열로 만들어지는데 이 중첩 배열을 평탄화 해주기 위해서는 `flat` 메서드를 사용하여
+
+```js
+const num = [1, 2, 3, 4, 5];
+
+const result = num.map((item) => [item, item, item]).flat();
+
+console.log(result); // [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5]
+```
+
+위와 같이 평탄화된 배열로 나타낼 수 있다.
+
+`map` 메서드와 `flat` 메서드를 체이닝 하는 것과 같은 결과를 낳는 메서드가 바로 `flatMap`이기 때문에
+
+```js
+const num = [1, 2, 3, 4, 5];
+
+const result = num.flatMap((item) => [item, item, item]);
+
+console.log(result); // [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5]
+```
+
+위와 같이 나타낼 수 있다.
