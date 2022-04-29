@@ -84,3 +84,78 @@ user.Hi(); // Hi my name is Joshua
 ```
 
 이 때, 위 객체의 메서드는 객체에 제한되어 있다. 따라서 위와 같이 함수를 호출한다.
+
+---
+
+## **프로퍼티 접근**
+
+프로퍼티에 접근하는 방법으로는 두 가지의 방법이 있다. 첫 번째로는 마침표로 접근하는 방법, 두 번째로는 대괄호로 접근하는 방법이다.
+
+예시를 통해 살펴 보자.
+
+```js
+const user = {
+  name: "Thomas",
+  age: 25,
+  country: "USA",
+};
+
+console.log(user.name); // Thomas
+
+console.log(user[age]); // Uncaught ReferenceError: age is not defined
+```
+
+이렇게 위와 같이 마침표 접근 연산자 우측 또는 대괄호 접근 연산자 내부에 프로퍼티 키를 넣어서 접근한다.
+
+이 때, 대괄호 표기법을 사용하는 경우에는 프로퍼티 키를 반드시 `""` 안에 넣어야한다.
+
+그렇지 않으면 아래처럼 자바스크립트 엔진이 프로퍼티 키가 아닌 식별자로 해석하여 오류가 발생한다.
+
+```js
+const user = {
+  name: "Thomas",
+  age: 25,
+  country: "USA",
+};
+
+console.log(user.name); // Thomas
+
+console.log(user["age"]); // 25
+```
+
+만약 객체에 존재하지 않는 프로퍼티 키에 접근한다면 에러가 발생하는 것이 아니라 `undefined`를 반환한다.
+
+```js
+const user = {
+  name: "Thomas",
+  age: 25,
+  country: "USA",
+};
+
+console.log(user.name); // Thomas
+
+console.log(user["age"]); // 25
+
+console.log(user["height"]); // undefined
+```
+
+프로퍼티 키로 프로퍼티에 접근하는 방법은 네이밍 규칙에 따라 다른데, 만약 식별자 네이밍 규칙을 준수하는 프로퍼티 키라면 마침표 접근 연산자로 접근하는 것이 가능하지만, 식별자 네이밍 규칙을 준수하지 않는 프로퍼티 키라면 반드시 대괄호 접근자로 접근해야 한다.
+
+```js
+const user = {
+  firstName: "Thomas",
+  "last-name": "Luke",
+};
+
+console.log(user.firstName); // Thomas
+
+console.log(user["firstName"]); // Thomas
+
+console.log(user.last - name); // NaN
+
+console.log(user["last-name"]); // Luke
+```
+
+위 처럼 네이밍 식별자 규칙을 준수하지 않는 프로퍼티 키를 마침표 접근 연산자로 접근하게 되면 브라우저에서는 `NaN`으로 평가되고, Node.js 환경에서는 `ReferenceError` 로 평가된다.
+
+---
