@@ -159,3 +159,41 @@ console.log(user["last-name"]); // Luke
 위 처럼 네이밍 식별자 규칙을 준수하지 않는 프로퍼티 키를 마침표 접근 연산자로 접근하게 되면 브라우저에서는 `NaN`으로 평가되고, Node.js 환경에서는 `ReferenceError` 로 평가된다.
 
 ---
+
+## **프로퍼티 동적 생성**
+
+만약에 객체가 가지고 있지 않은 프로퍼티 키에 프로퍼티 값을 할당하게되면, 새로운 프로퍼티가 객체에 추가된다.
+
+```js
+const user = {
+  name: "Mark",
+  age: 33,
+};
+
+console.log(user); // {name: 'Mark', age: 33}
+
+user.city = "Washington";
+user["phone-number"] = "010-0000-1111";
+
+console.log(user); // {name: 'Mark', age: 33, city: 'Washington', phone-number: '010-0000-1111'}
+```
+
+## **프로퍼티 삭제**
+
+프로퍼티를 삭제하는 방법은 `delete` 연산자를 사용하여 수행할 수 있다.
+
+이때, `delete` 연산자의 피연산자는 **프로퍼티 키**여야 한다.
+
+```js
+const greeting = {
+  korea: "안녕하세요",
+  america: "hello",
+  france: "메롱",
+};
+
+console.log(greeting); // {korea: '안녕하세요', america: 'hello', france: '메롱'}
+
+delete greeting.france;
+
+console.log(greeting); // {korea: '안녕하세요', america: 'hello'}
+```
