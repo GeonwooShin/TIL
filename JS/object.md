@@ -197,3 +197,63 @@ delete greeting.france;
 
 console.log(greeting); // {korea: '안녕하세요', america: 'hello'}
 ```
+
+---
+
+## **축약 표현**
+
+### **프로퍼티 축약 표현**
+
+위에서 프로퍼티는 프로퍼티 키와 프로퍼티 값으로 이루어진다는 것을 알게됐다.
+
+이 때, ES6 이후 프로퍼티의 값으로 변수를 사용하는 경우에는 프로퍼티 키를 생략하는 것이 가능하다.
+
+```js
+const phoneNumber = "010-0000-0000";
+
+const age = 25;
+
+const user = {
+  phoneNumber: phoneNumber,
+  age: age,
+};
+
+const user2 = {
+  phoneNumber,
+  age,
+};
+
+console.log(user.phoneNumber); // 010-0000-0000
+console.log(user.age); // 25
+
+console.log(user2.phoneNumber); // 010-0000-0000
+console.log(user2.age); // 25
+```
+
+### **메서드 축약 표현**
+
+메서드도 ES6 부터 정의할 때 `function` 키워드를 생략하는 축약 표현을 사용할 수 있다.
+
+```js
+const user = {
+  name: "John",
+  age: 33,
+  print: function () {
+    console.log(`${this.name}, ${this.age}세`);
+  },
+};
+
+user.print(); // John, 33세
+
+const user2 = {
+  name: "Nicole",
+  age: 22,
+  print() {
+    console.log(`${this.name}, ${this.age}세`);
+  },
+};
+
+user2.print(); // Nicole, 22세
+```
+
+위와 같이 축약 표현으로 메서드를 정의하는 것이 가능하다. 하지만 이 때, 두 함수는 차이점이 존재하는데 다음에 같이 알아보자.
