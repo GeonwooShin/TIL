@@ -77,12 +77,81 @@ user2.userName = "Thomas";
 
 console.log(user1, user2);
 // {isLogin: true, userName: 'Thomas'} {isLogin: true, userName: 'Thomas'}
+
+console.log(user1 === user2); // true
 ```
 
 분명 `user2` 변수에 `user1` 객체를 할당하고 `user2`의 프로퍼티를 변경하였는데, `user1`의 프로퍼티 또한 변경되었다. 이 때는 `user1`과 `user2`가 동일한 객체를 참조하고 있기 때문이다.
+
+또한, 같은 참조 값을 가지기 때문에 `user1 === user2`의 값은 `true`가 나온다.
 
 이렇게 변경을 의도한 객체와 더불어 의도하지 않은 객체까지 변경되는 경우에 대한 대응이 필요하다.
 
 ---
 
 ## **불변 데이터 패턴**
+
+위에서 언급한 것처럼 다른 객체를 참조한 객체를 변경하도록 시도하면, 의도하지 않은 객체의 변경이 일어나기 때문에
+
+다른 객체를 참조한 객체에 대해 변경이 필요한 경우에는 두 가지 방법을 사용하여 의도하지 않은 객체의 변경을 방지한다.
+
+1. Object.assign
+2. Object.freeze
+
+### **Object.assign**
+
+`Object.assign`은 첫 번째 인자로 받는 객체로 두 번째 인자로 받는 객체의 프로퍼티를 복사하는 것이다.
+
+리턴값으로는 첫 번째 객체를 반환한다.
+
+```js
+const user1 = {
+  name: "John",
+  age: 39,
+  city: {
+    address: "Busan",
+  },
+};
+
+const user2 = Object.assign({}, user1);
+
+console.log(user1 === user2); // false
+
+user2.age = 45; // user2 객체의 프로퍼티 변경
+
+console.log(user1, user2);
+// {name: 'John', age: 39, city: {…}} {name: 'John', age: 45, city: {…}}
+```
+
+위처럼 `Object.assign`을 사용하면 `user2`의 프로퍼티 값을 변경해도 `user1`에 영향을 주지 않는다.
+
+또한, `user1`과 `user2`는 참조값이 다르기 때문에 `user1 === user2`의 값은 `false`가 나온다.
+
+하지만 `Obejct.assign`을 사용하면서 주의해야할 점은 객체내부의 객체 즉 `Nested Object`는 깊은 복사가 이루어지지 않는다는 것이다.
+
+```js
+const user1 = {
+  name: "Bryan",
+  age: 25,
+  spec: {
+    height: 175,
+    weight: 68,
+  },
+};
+
+const user2 = Object.assign({}, user1);
+
+user2.spec.height = 180;
+user2.spec.weight = 77;
+
+console.log(user1.spec, user2.spec);
+// {height: 180, weight: 77} {height: 180, weight: 77}
+```
+
+위의 예제를 살펴보면 `user1`을 깊은복사 한 `user2`의 `Nested Object`의 값을 변경했을 때, `user1`의 `Nested Object` 또한 값이 변경되는 것을 알 수 있다.
+
+따라서, 이 점을 유의하도록 하자.
+
+---
+
+### **Object.freeze**
