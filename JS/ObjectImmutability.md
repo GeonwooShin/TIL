@@ -58,7 +58,7 @@ console.log(favorite); // 'Samsung'
 
 객체 `product.monitor`의 값이 변경되었으니 `product.monitor` 값을 할당한 변수 `favorite`도 변경된 값을 가진다고 생각할 수도 있지만,
 
-변수 `favorite`에 `product.monitor` 값을 할당했을 때 메모리에 이미 존재하는 `product.monitor`를 참조하는 것이 아니라 해당 `product.monitor`의 **_값_**을 메모리에 새로 생성하여 그 새로 생성된 값을 참조하기 때문에 객체의 프로퍼티 값이 변경되더라도 변수 `favorite`이 참조하는 값은 변경되지 않는다.
+변수 `favorite`에 `product.monitor` 값을 할당했을 때 메모리에 이미 존재하는 `product.monitor`를 참조하는 것이 아니라 해당 `product.monitor`의 **값**을 메모리에 새로 생성하여 그 새로 생성된 값을 참조하기 때문에 객체의 프로퍼티 값이 변경되더라도 변수 `favorite`이 참조하는 값은 변경되지 않는다.
 
 다음 예제를 살펴보자.
 
@@ -155,3 +155,56 @@ console.log(user1.spec, user2.spec);
 ---
 
 ### **Object.freeze**
+
+`Object.freeze`는 객체를 동결하는 것으로 불변 객체로 만드는 것이 가능하다.
+
+더 정확하게 말하면, `Object.freeze`로 동결된 객체는 프로퍼티 추가 및 삭제, 프로퍼티 값의 갱신, 어트리뷰트 재정의 금지와 같이 프로퍼티에 관련된 것이 모두 금지된다. 즉, 읽기 상태만 가능한 객체가 된다.
+
+```js
+const user = {
+  name: "Thomas",
+  age: 24,
+};
+
+console.log(Object.isFrozen(user)); // false
+
+Object.freeze(user);
+
+console.log(Object.isFrozen(user)); // true
+
+user.name = "Ryan"; // 프로퍼티 재정의 금지
+user.phonNumber = "010-0000-0000"; // 프로퍼티 추가 금지
+delete user.age; // 프로퍼티 삭제 금지
+
+console.log(user); // {name: 'Thomas', age: 24}
+```
+
+위의 예제 처럼 `Object.isFrozen` 메서드를 통해 객체가 동결되었는지 확인이 가능하고, 동결된 객체면 `true`, 동결되지 않은 객체라면 `false`를 반환한다.
+
+하지만, `Object.freeze` 메서드는 `Nested Object`의 변경은 막을 수 없다. 따라서, 이 문제를 해결하기 위해서는 객체를 값으로 갖는 모든 프로퍼티들에 대하여 `Object.freeze` 메서드를 처리해주어야 한다.
+
+```js
+const user = {
+  name: "Thomas",
+  age: 24,
+  city: {
+    address: "USA",
+  },
+};
+
+function deepFreeze(obj) {
+  if (obj && typeof obj === "object" && !Object.isFrozen(obj)) {
+    Object.freeze(obj);
+    Object.keys(obj).forEach((key) => deepFreeze(obj[key]));
+  }
+  return obj;
+}
+
+deepFreeze(user);
+
+user.city.address = "Korea";
+
+console.log(user.city.address); // USA
+```
+
+위와 같이 중첩객체까지 모두 `Object.freeze` 해준다면 중첩 객체 또한 불변객체로 만드는 것이 가능하다.
