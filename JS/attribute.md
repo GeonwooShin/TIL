@@ -104,3 +104,56 @@ console.log(Object.getOwnPropertyDescriptor(user, "age"));
 ---
 
 ### **접근자 프로퍼티**
+
+접근자 프로퍼티는 데이터 프로퍼티와 다르게 자체적인 값을 가지지 않으며, 데이터 프로퍼티의 값을 읽거나 저장할 때 관여하는 프로퍼티이다.
+
+```
+1. [[Get]]
+
+- 데이터 프로퍼티의 값을 읽을 때 호출되는 접근자 함수이다.
+- 접근자 프로퍼티 키로 프로퍼티 값에 접근하면 그 결과가 프로퍼티 값으로 반환된다.
+
+2. [[Set]]
+
+- 데이터 프로퍼티의 값을 저장할 때 호출되는 접근자 함수이다.
+- 접근자 프로퍼티 키로 값을 저장하면 그 결과가 프로퍼티 값으로 저장된다.
+
+3. [[Enumerable]]
+
+- 데이터 프로퍼티의 [[Enumerable]] 값과 같다
+
+4. [[Configurable]]
+
+- 데이터 프로퍼티의 [[Configurable]] 값과 같다
+```
+
+다음 예제를 살펴보자.
+
+```js
+const user1 = {
+  name: "James",
+  age: 39,
+  get profile() {
+    return `${this.name} ${this.age}`;
+  },
+  set userName(name) {
+    this.name = name;
+  },
+};
+
+console.log(user1.profile); // James 39
+
+user1.userName = "Ryan";
+
+console.log(user1.profile); // Ryan 39
+```
+
+위의 예제에서는 profile 이라는 getter 함수를 가지고, userName 이라는 setter 함수를 가진다.
+
+userName 이라는 접근자 프로퍼티를 통해 프로퍼티 값을 저장한다.
+
+따라서, 저장된 프로퍼티 값을 profile 이라는 접근자 프로퍼티를 통해 프로퍼티 값을 참조한다.
+
+---
+
+## **프로퍼티 정의**
