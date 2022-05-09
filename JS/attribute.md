@@ -157,3 +157,57 @@ userName 이라는 접근자 프로퍼티를 통해 프로퍼티 값을 저장�
 ---
 
 ## **프로퍼티 정의**
+
+`Object.defineProperty`를 통해 객체의 프로퍼티 어트리뷰트를 정의하는 것이 가능하다.
+
+즉, 객체에 직접 새로운 어트리뷰트를 정의하거나 이미 존재하는 어트리뷰트를 수정하는 것이 가능하다.
+
+```js
+const obj = {
+  name: "John",
+  age: 39,
+};
+
+Object.defineProperty(obj, "city", {
+  value: "NewYork",
+});
+
+console.log(Object.getOwnPropertyDescriptor(obj, "city"));
+// {value: 'NewYork', writable: false, enumerable: false, configurable: false}
+
+console.log(obj.city); // NewYork
+```
+
+위의 예제처럼 프로퍼티 `city`에 대한 프로퍼티 어트리뷰트 `value`를 정의 해주는 것이 가능하다.
+
+하지만, 이 때 `city` 프로퍼티의 프로퍼티 어트리뷰트는 모두 기본값인 `false`로 설정된다.
+
+따라서, 프로퍼티 키 `city`의 프로퍼티 값을 변경 또는 삭제하는 것이 불가하고, for in문이나 `Object.keys`로 접근하여 순회하는 것이 불가능하다.
+
+```js
+const obj = {
+  name: "John",
+  age: 39,
+};
+
+Object.defineProperty(obj, "city", {
+  value: "NewYork",
+  configurable: true,
+});
+
+Object.defineProperty(obj, "city", {
+  writable: true,
+});
+
+obj.city = "Washington";
+
+console.log(obj.city); // Washington
+```
+
+위의 예제를 보면 `configurable` 속성을 `true`로 설정했기 때문에 프로퍼티 어트리뷰트의 재정의가 가능해진다.
+
+따라서, 다시 한번 `Object.defineProperty`를 통해 어트리뷰트를 재정의하는 것이 가능하기 때문에 `writable` 속성을 `true`로 설정하여 프로퍼티 값을 변경하는 것이 가능하도록 설정한다면 위 객체 프로퍼티 city의 값이 NewYork에서 Washington으로 변경된다.
+
+이처럼 위에서 `Enumerable` 속성을 `true`로 설정해준다면 for in문이나 `Object.keys` 메소드를 사용하여 열거하는 것도 가능해진다.
+
+---
