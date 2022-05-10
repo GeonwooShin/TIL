@@ -211,3 +211,131 @@ console.log(obj.city); // Washington
 이처럼 위에서 `Enumerable` 속성을 `true`로 설정해준다면 for in문이나 `Object.keys` 메소드를 사용하여 열거하는 것도 가능해진다.
 
 ---
+
+객체의 다수의 프로퍼티 속성을 한번에 지정하려면 `Object.defineProperties` 메서드를 사용한다.
+
+```js
+const user = {
+  name: "John",
+  age: 39,
+};
+
+Object.defineProperties(user, {
+  name: {
+    value: "Ryan",
+    writable: false,
+    enumerable: false,
+    configurable: false,
+  },
+  age: {
+    value: 42,
+    writable: false,
+    enumerable: false,
+    configurable: false,
+  },
+});
+
+console.log(Object.getOwnPropertyDescriptors(user));
+/* age:
+configurable: false
+enumerable: false
+value: 42
+writable: false
+*/
+
+/*
+name:
+configurable: false
+enumerable: false
+value: "Ryan"
+writable: false
+*/
+```
+
+---
+
+## **객체 보호**
+
+|          메서드          | 프로퍼티 추가 | 프로퍼티 삭제 | 프로퍼티 속성 변경 | 프로퍼티 값 변경 |
+| :----------------------: | :-----------: | :-----------: | :----------------: | :--------------: |
+| Object.preventExtensions |       x       |       o       |         o          |        o         |
+|       Object.seal        |       x       |       x       |         o          |        o         |
+|      Object.freeze       |       x       |       x       |         x          |        x         |
+
+### **Object.preventExtensions**
+
+`Object.preventExtensions` 메서드는 객체의 확장을 막는 것으로 새로운 프로퍼티를 추가하는 것을 막는다.
+
+```js
+const user = {
+  name: "John",
+  age: 39,
+};
+
+Object.preventExtensions(user); // 객체 확장 방지
+
+user.city = "NewYork"; // 프로퍼티 추가 불가능
+user.name = "Amy"; // 프로퍼티 값의 변경 가능
+delete user.age; // 프로퍼티 삭제 가능
+console.log(user); // {name: 'Amy'}
+
+console.log(Object.getOwnPropertyDescriptor(user, "name"));
+// {value: 'Amy', writable: true, enumerable: true, configurable: true}
+
+Object.defineProperty(user, "name", {
+  writable: false,
+}); // 프로퍼티 속성 변경 가능
+
+console.log(Object.getOwnPropertyDescriptor(user, "name"));
+// {value: 'Amy', writable: false, enumerable: true, configurable: true}
+```
+
+따라서 위의 예시와 같이 프로퍼티 값을 변경하거나 삭제하는 것, 그리고 프로퍼티의 속성을 변경하는 것에는 문제가 없다.
+
+### **Object.seal**
+
+`Object.seal` 메서드는 객체를 밀봉시키는 것으로 새로운 프로퍼티 추가, 프로퍼티 삭제를 막아준다.
+
+프로퍼티 값의 변경은 가능하고, 객체의 프로퍼티 속성이 `writable` 의 값이 `true`인 경우에는 프로퍼티 속성 변경이 가능하지만, `writable` 속성의 값이 `false`인 경우에는 프로퍼티 속성 변경이 불가능하다.
+
+```js
+const user = {
+  name: "John",
+  age: 39,
+};
+
+Object.seal(user);
+
+console.log(Object.isSealed(user)); // true
+
+user.city = "NewYork"; // 프로퍼티 추가 불가능
+user.name = "Amy"; // 프로퍼티 값 변경 가능
+delete user.age; // 프로퍼티 삭제 불가능
+console.log(user); // {name: 'Amy', age: 39}
+
+console.log(Object.getOwnPropertyDescriptor(user, "age"));
+// {value: 'Amy', writable: true, enumerable: true, configurable: false}
+
+Object.defineProperty(user, "age", {
+  value: 33,
+}); // 프로퍼티 속성 변경 가능
+
+Object.defineProperty(user, "age", {
+  value: 35,
+}); // 프로퍼티 속성 변경 가능
+
+Object.defineProperty(user, "age", {
+  writable: false,
+}); // 프로퍼티 속성 변경 가능 단, 이 변경 이후로 부터 프로퍼티 속성 변경 불가능
+
+console.log(Object.getOwnPropertyDescriptor(user, "age"));
+// {value: 'Amy', writable: false, enumerable: true, configurable: false}
+```
+
+`Object.seal` 메서드는 `Object.isSealed` 메서드를 통해 밀봉이 되었는지 안되었는지 불리언 값으로 확인이 가능하다. `Object.seal` 메서드를 사용하면 해당 객체의 프로퍼티 속성인 `configurable` 의 값은 `false`로 변경된다.
+
+이 때, 객체의 프로퍼티 속성 중 `writable`의 기본 값은 `true`이기 때문에 `configurable`의 값이 `false`임에도 불구하고 프로퍼티 속성의 변경이 가능하다.
+
+후에 프로퍼티 속성 `writable`의 값을 `false`로 바꿔준다면, 프로퍼티 속성의 변경이 불가해진다.
+
+### **Object.freeze**
