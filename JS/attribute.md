@@ -296,7 +296,7 @@ console.log(Object.getOwnPropertyDescriptor(user, "name"));
 
 `Object.seal` 메서드는 객체를 밀봉시키는 것으로 새로운 프로퍼티 추가, 프로퍼티 삭제를 막아준다.
 
-프로퍼티 값의 변경은 가능하고, 객체의 프로퍼티 속성이 `writable` 의 값이 `true`인 경우에는 프로퍼티 속성 변경이 가능하지만, `writable` 속성의 값이 `false`인 경우에는 프로퍼티 속성 변경이 불가능하다.
+프로퍼티 값의 변경은 가능하고, 객체의 프로퍼티 속성이 `writable` 의 값이 `true`인 경우에는 `configurable` 속성을 제외한 나머지 프로퍼티 속성 변경이 가능하지만, `writable` 속성의 값이 `false`인 경우에는 모든 프로퍼티 속성 변경이 불가능하다.
 
 ```js
 const user = {
@@ -339,3 +339,28 @@ console.log(Object.getOwnPropertyDescriptor(user, "age"));
 후에 프로퍼티 속성 `writable`의 값을 `false`로 바꿔준다면, 프로퍼티 속성의 변경이 불가해진다.
 
 ### **Object.freeze**
+
+`Object.freeze` 메서드는 객체를 동결시키는 것으로 프로퍼티 추가 및 삭제 금지, 프로퍼티 어트리뷰트 재정의와 프로퍼티 값 변경 또한 금지된다. 즉, 동결 상태인 객체는 읽기 전용 객체이다.
+
+```js
+const user = {
+  id: "hayden0011",
+  name: "Hayden",
+  email: "hayden0011@gmail.com",
+};
+
+Object.freeze(user); // 객체 동결
+
+console.log(Object.isFrozen(user)); // 객체 동결 확인
+
+user.phoneNumber = "010-0000-0000"; // 프로퍼티 추가 불가능
+user.name = "Bryan"; // 프로퍼티 값 변경 불가능
+delete user.name; // 프로퍼티 삭제 불가능
+
+// Object.defineProperty(user, "name", {
+//   enumerable: false,
+// });  // 프로퍼티 어트리뷰트 재정의 불가능
+
+console.log(Object.getOwnPropertyDescriptor(user, "name"));
+// {value: 'Hayden', writable: false, enumerable: true, configurable: false}
+```
