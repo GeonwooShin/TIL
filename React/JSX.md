@@ -17,6 +17,8 @@ function App() {
 ```
 
 ```js
+import React from "react";
+
 function App() {
   return (
     <div>
@@ -41,6 +43,8 @@ function App() {
 ### **1. 태그 닫힘**
 
 ```js
+import React from "react";
+
 function App() {
   return (
     <div>
@@ -62,6 +66,8 @@ function App() {
 JSX 문법으로는 가상 DOM에서 컴포넌트는 하나의 DOM 트리 구조로 이루어져야 하기 때문에 여러 개의 태그가 존재한다면 반드시 하나의 부모 태그로 감싸주어야 한다.
 
 ```js
+import React from "react";
+
 function App() {
   return (
     <div>Hello</div>
@@ -71,3 +77,58 @@ function App() {
 ```
 
 위의 예시는 하나의 부모 태그로 감싸주지 않았기 때문에 에러가 발생한다. 그렇다면 위의 예시를 JSX 문법을 준수해서 표현한다면 다음과 같은 몇가지 방법이 존재한다.
+
+### **방법 1**
+
+```js
+import React from "react";
+
+function App() {
+  return (
+    <div>
+      <div>Hello</div>
+      <h1>JSX</h1>
+    </div>
+  );
+}
+```
+
+위의 예시는 여러개의 태그를 하나의 부모 태그로 감싸주었기 때문에 JSX 문법에 어긋나지 않는다.
+
+### **방법 2**
+
+```js
+import React from "react";
+
+function App() {
+  return (
+    <Fragment>
+      <div>Hello</div>
+      <h1>JSX</h1>
+    </Fragment>
+  );
+}
+```
+
+만약 단순하게 부모 태그로 감싸주기 위해서 <div>와 같이 의미가 없는 태그를 사용한다면 DOM 트리에 의도치않게 `<div>` 태그가 삽입되는 상황이 발생할 수 있다. 따라서 위와 같이 리액트의 `Fragment`로 부모 태그와 같은 역할을 수행하도록 하면서 DOM 트리에는 삽입되지않게 하는 것이 가능하다.
+
+### **방법 3**
+
+```js
+import React from "react";
+
+function App() {
+  return (
+    <>
+      <div>Hello</div>
+      <h1>JSX</h1>
+    </>
+  );
+}
+```
+
+`Fragment` 태그는 위와 같이 `<></>`로 대체가 가능하다.
+
+---
+
+## **JSX내 자바스크립트 표현식**
