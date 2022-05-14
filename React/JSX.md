@@ -132,3 +132,79 @@ function App() {
 ---
 
 ## **JSX내 자바스크립트 표현식**
+
+JSX 내부에서 자바스크립트 문법을 사용하기 위해서는 `{}` 중괄호가 필요하다.
+
+다음 예제를 살펴보자.
+
+```js
+import React from "react";
+
+const users = ["Thomas", "Lexi", "Bryan"];
+
+function App() {
+  return (
+    <>
+      <h1>UserNames</h1>
+      {users.map((user) => (
+        <li>{user}</li>
+      ))}
+    </>
+  );
+}
+```
+
+위의 예제에서는 `{}` 내부에서 자바스크립트 문법을 사용하여 배열 `users`를 map으로 순회함으로써 `<li>` 태그로 배열의 각 요소를 리턴하고 있다.
+
+또한, 조건을 통한 렌더링이 필요할 때는 JSX 외부에서 if문을 사용하거나 JSX 내부에서는 조건부 연산자를 사용하도록 한다.
+
+```js
+import React from "react";
+
+function App() {
+  const name = "Thomas";
+  return (
+    <>
+      {name === "Thomas" ? (
+        <p>저의 이름은 Thomas입니다.</p>
+      ) : (
+        <p>저의 이름은 Thomas가 아닙니다.</p>
+      )}
+    </>
+  );
+}
+```
+
+위와 같이 조건에 따라 렌더링이 되는 것을 볼 수 있다.
+
+```js
+import React from "react";
+
+function App() {
+  const name = "Thomas";
+  return <>{name === "Thomas" && <p>저의 이름은 Thomas 입니다.</p>}</>;
+}
+```
+
+또한, 삼항연잔자를 사용할수있다.
+
+```js
+import React from "react";
+
+function App() {
+  const name = "Thomas";
+  return (
+    <>
+      {(() => {
+        if (name === "Thomas") {
+          return <p>저의 이름은 Thomas 입니다.</p>;
+        } else {
+          return <p>저의 이름은 Thomas가 아닙니다.</p>;
+        }
+      })()}
+    </>
+  );
+}
+```
+
+만약에, JSX 내부에서 if문을 사용하고 싶다면, 위 예시와 같이 즉시실행함수를 통해 사용하는 것이 가능하다.
