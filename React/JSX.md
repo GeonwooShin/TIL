@@ -208,3 +208,31 @@ function App() {
 ```
 
 만약에, JSX 내부에서 if문을 사용하고 싶다면, 위 예시와 같이 즉시실행함수를 통해 사용하는 것이 가능하다.
+
+---
+
+JSX 내부에서는 HTML 어트리뷰트를 camelCase로 작성해야한다.
+
+```js
+import React from "react";
+
+function App() {
+  return (
+    <div>
+      <h1 style={{ backgroundColor: "yellow" }}>HELLO</h1>
+    </div>
+  );
+}
+```
+
+또한 HTML 내부에서 사용하는 어트리뷰트 `class`는 JSX 내부에서는 `className`으로 사용한다.
+
+```js
+import React from "react";
+
+function App() {
+  <div>
+    <h1 className="greeting">HELLO</h1>
+  </div>;
+}
+```
