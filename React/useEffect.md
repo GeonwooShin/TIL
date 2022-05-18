@@ -100,3 +100,39 @@ function Example() {
 위 처럼 dependency로 빈 배열을 주게되면, 클래스형 컴포넌트에서 사용되는 `componentDidMount()`와 비슷한 역할을 하게된다.
 
 따라서, 맨 처음 렌더링되는 시점에 한 번만 실행된다.
+
+그렇다면 dependency로 `value`를 넣어준다면 실행 결과는 어떻게될까?
+
+```jsx
+import React, { useEffect, useState } from "react";
+
+function Example() {
+  const [value, setValue] = useState(0);
+  const [number, setNumber] = useState(0);
+
+  useEffect(() => {
+    console.log("change");
+  }, [value]);
+
+  function plus() {
+    setValue(value + 1);
+  }
+
+  function minus() {
+    setNumber(number - 1);
+  }
+
+  return (
+    <div>
+      <p>{number}</p>
+      <p>{value}</p>
+      <button onClick={minus}>Minus</button>
+      <button onClick={plus}>Plus</button>
+    </div>
+  );
+}
+```
+
+위의 예시는 state인 `number`가 변화해도 `useEffect`는 실행되지 않고, `value`가 변화함에 따라서 `useEffect`가 실행될 것이다.
+
+이렇게 `useEffect`는 함수형 컴포넌트 내에 콜백함수를 렌더링이 일어날 때 마다 실행될 수 있게 하고, 렌더링이 일어날 때마다 콜백 함수를 실행하도록 하는 것은 비효율적이기 때문에 두번째 인자인 dependency로 특정 값을 받아, 그 값이 변하지 않는다면 다음 렌더딩이 일어났을 때 해당 콜백 함수를 실행하지 않도록 하는 것으로 정리할 수 있다.
