@@ -35,3 +35,79 @@ function App() {
 이제 라우팅을 사용 할 준비 단계는 끝이 났고, 라우팅을 할 페이지를 만들어보자.
 
 일반적으로 라우팅 페이지로 사용할 컴포넌트는 `pages`라는 폴더에 관리하도록 한다.
+
+pages 내부에 `Home`과 `About` 컴포넌트를 생성한 후, 각 컴포넌트의 내부는 다음과 같다.
+
+```jsx
+export default function Home() {
+  return (
+    <div>
+      <h1>Home!</h1>
+    </div>
+  );
+}
+```
+
+```jsx
+export default function About() {
+  return (
+    <div>
+      <h1>About!</h1>
+    </div>
+  );
+}
+```
+
+이제 각 컴포넌트로 이동할 수 있도록 라우터를 연결해보자
+
+```jsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/About" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+`BrowserRouter` 내부에 `Route` 컴포넌트를 통해 브라우저 주소 경로에 따라 해당 컴포넌트로 이동할 수 있도록하고 `Route` 컴포넌트는 `Routes`로 감싸주어야한다.
+
+`Route`의 속성인 `path`에 해당 컴포넌트를 보여줄 경로를 설정하고 `element`로 컴포넌트를 연결해준다. 이 때, `element` 속성에는 JSX 형태로 태그와 함께 컴포넌트를 연결해준다.
+
+이제는 주소창에 `주소/`를 입력하면 `Home` 컴포넌트가 화면에 나타날 것이고, `주소/About`을 입력하면 `About` 컴포넌트가 나타날 것이다.
+
+하지만 웹페이지에서는 사용자가 해당 웹 서비스를 이용할 때 주소창에 일일이 원하는 서비스 탭을 입력해서 이동하지 않는다.
+
+이것은 `Link`라는 컴포넌트로 해결할 수 있다.
+
+```jsx
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Link to="/">Home</Link>
+      <Link to="/About">About</Link>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/About" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+위와 같이 `Link` 컴포넌트를 통해 속성 `to`가 가리키는 주소로 이동하는 것이 가능하다. 일반적으로 이런 동작은 HTML에서 `a` 태그가 담당했지만, 리액트에서 `a` 태그를 사용하게되면 브라우저에서는 페이지를 새로 불러오게되어 SPA의 역할을 하지 못한다.
+
+---
+
+### **URL 파라미터와 쿼리스트링**
