@@ -111,3 +111,40 @@ export default function App() {
 ---
 
 ### **URL 파라미터와 쿼리스트링**
+
+기본적으로 페이지 주소에서 다음과 같은 주소를 본 적이 있을 것이다.
+
+`www.xxxxx.com/about/123` 또는 `www.xxxxx.com/about?details=true` 이렇게 유동적인 값을 다음과 같이 정의 한다.
+
+파라미터: `www.xxxxx.com/about/123`  
+쿼리: `www.xxxxx.com/about?details=true`
+
+파라미터와 쿼리를 사용하는 규칙을 따로 정해진게 없지만, 일반적으로 파라미터는 특정 id 또는 이름으로 조회를 하는 경우에 사용하고, 쿼리는 키워드나 요청에 필요한 옵션을 전달할 때 사용한다.
+
+이제 위에서 만들어 놓은 컴포넌트에 몇가지 살을 덧 붙여서 파라미터와 쿼리를 사용해보자.
+
+일단 추가적으로 **중첩 라우팅**을 설명하자면 라우팅 매핑을 여러개의 컴포넌트를 거쳐서 단계별로 정의하는 것이다.  
+예를 들어 `https://www.xxxxx.com/About` 이라는 `About` 탭에서 특정 회원 `John`에 대한 페이지를 보여주고싶을 경우 `https://www.xxxxx.com/About/John`과 같이 라우팅을 매핑해야 한다. 이런 경우에는 중첩 라우팅을 통해 유연한 라우팅을 구현할 수 있다.
+
+```jsx
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Link to="/">Home</Link>
+      <Link to="/About">About</Link>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/About/" element={<About />}>
+          <Route path=":userName" element={<User />}></Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+위의 예시는
