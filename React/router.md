@@ -138,7 +138,7 @@ export default function App() {
       <Link to="/About">About</Link>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/About/" element={<About />}>
+        <Route path="/About" element={<About />}>
           <Route path=":userName" element={<User />}></Route>
         </Route>
       </Routes>
@@ -147,4 +147,42 @@ export default function App() {
 }
 ```
 
-위의 예시는
+위의 예시는 중첩 라우팅을 구현한 것이다.
+
+한가지 유의할 사항은 중첩 라우팅을 구현하는 경우에는 중첩 라우팅의 최상단 컴포넌트에 `<Outlet />` 컴포넌트를 추가해주어야 한다.
+
+해당 중첩 라우팅의 최상단 컴포넌트는 `About` 컴포넌트 이므로 `<Outlet />` 컴포넌트를 추가해준 결과는 다음과 같다.
+
+```jsx
+import { Outlet } from "react-router-dom";
+
+export default function About() {
+  return (
+    <div>
+      <h1>About!</h1>
+      <Outlet />
+    </div>
+  );
+}
+```
+
+이제 주소창에 `https://www.xxxxx.com/About/John`을 입력해보면 엘리먼트인 `User` 컴포넌트로 이동할 것이다.
+
+특정 회원에 대한 페이지를 보여줄 `User` 컴포넌트는 다음과 같다.
+
+```jsx
+import { useParams } from "react-router-dom";
+
+export default function User() {
+  const { userName } = useParams();
+  return (
+    <div>
+      <p>제 이름은 {userName}입니다.</p>
+    </div>
+  );
+}
+```
+
+여기서 `params`로 넘어오는 값은 `useParams`를 통해 전달 받을 수 있다. 따라서 주소가 `https://www.xxxxx.com/About/John` 이라면, `John`은 `userName`의 `params`로 넘어오게 된다.
+
+---
