@@ -185,4 +185,63 @@ export default function User() {
 
 여기서 `params`로 넘어오는 값은 `useParams`를 통해 전달 받을 수 있다. 따라서 주소가 `https://www.xxxxx.com/About/John` 이라면, `John`은 `userName`의 `params`로 넘어오게 된다.
 
+파라미터는 `useParams`를 통해 전달받을 수 있다는 것을 알았으니 쿼리를 받는 방법을 알아보자.
+
+---
+
+쿼리는 `useLocation`을 통해서 전달 받을 수 있다. 다음 예제를 보자.
+
+`About` 컴포넌트에서 location 이라는 변수에 `useLocation`객체를 받고 있다.
+
+이 `location` 변수를 콘솔에 찍어보면 `pathname`, `search`와 같은 state를 확인 할 수가 있는데, `pathname`은 **URL에 도메인다음의 / 부터의 문자열**을 의미하고 `search`는 **pathname다음의 ?부터의 문자열**을 의미한다.
+
+따라서 `www.xxxxx.com/about?details=true`와 같은 주소에서 `pathname` 다음의 ?부터의 문자열은 `?details=true`에 해당하고 이것이 바로 쿼리를 의미한다. 또한, 이 쿼리는 `search`에 해당한다.
+
+```jsx
+import { Outlet, useLocation } from "react-router-dom";
+
+export default function About() {
+  const location = useLocation();
+  console.log(location);
+  return (
+    <div>
+      <h1>About!</h1>
+      <h1>{location.search}</h1>
+      <Outlet />
+    </div>
+  );
+}
+```
+
+하지만 `search`에서 얻을 수 있는 쿼리의 값은 `?`도 포함되어 있기 때문에, 쿼리를 `key`와 `value`로 받기 위해서는 쿼리스트링을 객체로 변환해주는 라이브러리인 `qs`의 도움이 필요하다.
+
+```
+$ npm i qs
+```
+
+위와 같이 qs 라이브러리를 설치하고 `QueryString()`의 첫번째 인자로 변환할 쿼리스트링을 넣어주고 두번째 인자로 `ignoreQueryPrefix`의 값을 `true`로 넣어주어야 `?`를 뺀 정확한 쿼리스트링을 `key` , `value` 형태의 객체로 받을 수 있다.
+
+```jsx
+import { Outlet, useLocation } from "react-router-dom";
+import QueryString from "qs";
+
+export default function About() {
+  const location = useLocation();
+  console.log(location);
+  const queryData = QueryString.parse(location.search, {
+    ignoreQueryPrefix: true,
+  });
+  console.log(queryData);
+  return (
+    <div>
+      <h1>About!</h1>
+      <h1>{location.search}</h1>
+      <Outlet />
+    </div>
+  );
+}
+```
+
+만약 접속한 주소가 `https://www.xxxxx.com/About?details=true` 라면 `location`의 `search`의 값은 `?detail=true` 일 것이고, 이 쿼리스트링을 사용하기 위해서 `qs` 라이브러리의 도움을 받아 출력한 `queryData`는 `{detail: true}` 라는 데이터를 가질 것이다.
+
 ---
