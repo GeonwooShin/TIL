@@ -245,3 +245,59 @@ export default function About() {
 만약 접속한 주소가 `https://www.xxxxx.com/About?details=true` 라면 `location`의 `search`의 값은 `?detail=true` 일 것이고, 이 쿼리스트링을 사용하기 위해서 `qs` 라이브러리의 도움을 받아 출력한 `queryData`는 `{detail: true}` 라는 데이터를 가질 것이다.
 
 ---
+
+### **라우터 이동**
+
+위와 같이 라우팅을 설정해놓고, 리액트에서 화면이동을 하기위해 사용하는 방법으로는 두 가지가 존재한다.
+
+1. 위의 예시에서 언급한 `react-router-dom`에서 제공하는 **Link** 컴포넌트를 사용
+
+```jsx
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Link to="/">Home</Link>
+      <Link to="/About">About</Link>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/About" element={<About />}>
+          <Route path=":userName" element={<User />}></Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+위의 예시를 다시 가져와서 설명을 해보자면 `Link` 컴포넌트에 `to`라는 어트리뷰트를 주고 해당 경로로 이동하도록 한다. 이 때, `Link` 컴포넌트는 DOM에서 `a` 태그로 변환된다.
+
+물론 `Link` 컴포넌트는 프로젝트 내에서 페이지를 전환한다.
+
+2. `react-router-dom`에서 제공하는 `useNavigation`을 사용
+
+```jsx
+import { useNavigate } from "react-router-dom";
+
+export default function SignIn() {
+  const navigate = useNavigate();
+  const goToHome = () => {
+    navigate("/");
+  };
+  return (
+    <div>
+      <p>회원 가입</p>
+      <button onClick={goToHome}>완료</button>
+    </div>
+  );
+}
+```
+
+위의 예시 처럼 `useNavigation`은 페이지를 전환하기전에 추가적인 로직이 있을 경우 사용한다.
+
+페이지 이동을 하는 데 사용하는 두 가지 방법은 `Link` 컴포넌트 사용과 `useNavigation` 사용이 있고, `Link` 컴포넌트는 오직 페이지 전환만이 필요한 경우에 사용하고, `useNavigation`은 페이지 전환 전에 추가적인 로직이 있을 경우에 사용한다.
+
+---
