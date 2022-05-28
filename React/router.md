@@ -300,4 +300,27 @@ export default function SignIn() {
 
 페이지 이동을 하는 데 사용하는 두 가지 방법은 `Link` 컴포넌트 사용과 `useNavigation` 사용이 있고, `Link` 컴포넌트는 오직 페이지 전환만이 필요한 경우에 사용하고, `useNavigation`은 페이지 전환 전에 추가적인 로직이 있을 경우에 사용한다.
 
+또한, `useNavigation`은 다음과 같이 사용하는 것도 가능하다.
+
+```jsx
+import { useNavigate } from "react-router-dom";
+
+export default function SignIn() {
+  const navigate = useNavigate();
+  const goToHome = () => {
+    navigate(-1);
+  };
+  return (
+    <div>
+      <p>회원 가입</p>
+      <button onClick={goToHome}>완료</button>
+    </div>
+  );
+}
+```
+
+`navigate`의 인자로 설정한 `path` 값을 넘겨서 이동하게 하는 것도 가능하지만, 인자로 `path` 값이 아닌 숫자를 넘긴다면 숫자 만큼 원하는 경로로 이동하는 것이 가능하다.
+
+위의 예시에서 인자로 넣어준 -1의 값은 뒤로 1페이지 이동을 의미한다.
+
 ---
