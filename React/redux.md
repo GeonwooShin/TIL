@@ -73,4 +73,45 @@ $ npm i react-redux
 
 ---
 
-### **리덕스 용어**
+### **리덕스 기본 개념**
+
+![리덕스 기본 개념](https://image.toast.com/aaaabcy/post/1598521393339redux.png)
+
+리덕스가 상태를 관리하는 과정은 다음과 같다. 순서대로 리덕스 예제를 만들어 보면서 하나하나가 무엇을 의미하는지 알아보자.
+
+1. **Store**
+
+스토어는 앱에 단 하나만 존재하는 것으로, state를 저장해 놓는 곳이다. 스토어는 다음과 같이 생성할 수 있다.
+
+```jsx
+import { createStore } from "redux";
+
+const store = createStore(리듀서);
+
+export default store;
+```
+
+또한 해당 스토어를 `<Provider>`을 이용해 프로젝트에 적용하도록 한다.
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import store from "./store";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <Provider store={store}>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </Provider>
+);
+```
+
+위와 같이 생성한 스토어의 인자로는 리듀서 함수가 들어와야 한다. 리듀서 함수를 생성해보자.
+
+2. **Reducer**
