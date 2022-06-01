@@ -91,7 +91,7 @@ const store = createStore(리듀서);
 export default store;
 ```
 
-또한 해당 스토어를 `<Provider>`을 이용해 프로젝트에 적용하도록 한다.
+위와 같이 생성한 스토어의 인자로는 리듀서 함수가 들어와야 한다.
 
 ```jsx
 import React from "react";
@@ -112,6 +112,51 @@ root.render(
 );
 ```
 
-위와 같이 생성한 스토어의 인자로는 리듀서 함수가 들어와야 한다. 리듀서 함수를 생성해보자.
+또한 해당 스토어를 프로젝트에 적용하기 위해서 `<Provider>`을 이용해 `store`를 적용시켜 주도록 한다.
 
-2. **Reducer**
+2. **Action**
+
+`Action`은 상태의 변화가 필요할 때 발생시키는 것으로 `Action`은 하나의 객체로 표현된다.
+
+이 때, 다른 컴포넌트에서 액션을 쉽게 발생시키기 위해서 액션 생성 함수를 만들어서 사용한다.
+
+```jsx
+const ADD_COUNT = "ADD_COUNT";
+const MINUS_COUNT = "MINUS_COUNT";
+
+function addCount() {
+  return {
+    type: ADD_COUNT,
+  };
+}
+
+function minusCount() {
+  return {
+    type: MINUS_COUNT,
+  };
+}
+```
+
+위의 액션 생성자함수의 객체들은 `type` 필드를 반드시 가져야 하고, 필요에 따라 다른 데이터도 넣을 수 있다.
+
+이제 리듀서를 만들어보자.
+
+3. **Reducer**
+
+리듀서는 액션의 `type`에 따라 그에 맞는 변화를 일으키는 함수이다. 첫 번째 인자로는 초기 상태 값을, 두 번째 인자로는 전달 받은 액션 객체를 받는다.
+
+```jsx
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_COUNT:
+      return { ...state, number: state.number + 1 };
+    case MINUS_COUNT:
+      return {
+        ...state,
+        number: state.number - 1,
+      };
+    default:
+      return state;
+  }
+};
+```
