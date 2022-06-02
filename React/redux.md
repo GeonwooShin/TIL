@@ -160,3 +160,12 @@ const reducer = (state = initialState, action) => {
   }
 };
 ```
+
+리듀서로 액션 객체가 전해질 수 있는 방법은 `dispatch`를 사용하는 것이다.
+
+`dispatch`는 스토어의 내장함수이고 액션을 발생시키는 것이다. 이 함수가 호출되면 스토어는 리듀서 함수를 실행시켜서 새로운 상태를 만들어 준다.
+
+```jsx
+<button onClick={() => {store.dispach(addCount())}}>더하기</button>
+<button onClick={() => {store.dispach(minusCount())}}>빼기</button>
+```
