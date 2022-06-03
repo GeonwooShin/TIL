@@ -161,6 +161,8 @@ const reducer = (state = initialState, action) => {
 };
 ```
 
+4. **Dispatch**
+
 리듀서로 액션 객체가 전해질 수 있는 방법은 `dispatch`를 사용하는 것이다.
 
 `dispatch`는 스토어의 내장함수이고 액션을 발생시키는 것이다. 이 함수가 호출되면 스토어는 리듀서 함수를 실행시켜서 새로운 상태를 만들어 준다.
@@ -169,3 +171,18 @@ const reducer = (state = initialState, action) => {
 <button onClick={() => {store.dispach(addCount())}}>더하기</button>
 <button onClick={() => {store.dispach(minusCount())}}>빼기</button>
 ```
+
+5. **subscribe**
+
+`subscribe` 또한 스토어의 내장 함수이고, 함수가 매개변수로 들어간다. 일반적으로 `subscribe`는 변화를 감지하기 하기 때문에 `action`이 `dispatch` 될 때 마다 매개변수인 함수가 실행된다.
+
+```jsx
+<button onClick={() => {store.dispach(addCount())}}>더하기</button>
+<button onClick={() => {store.dispach(minusCount())}}>빼기</button>
+
+store.subscribe(() => {
+  console.log('변화 감지')
+})
+```
+
+위와 같은 예제가 있다면, 더하기 버튼 또는 빼기 버튼을 클릭할 때마다 `subscribe`는 매개변수로 들어온 함수를 실행하게 되는 것이다.
