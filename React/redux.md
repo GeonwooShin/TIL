@@ -186,3 +186,43 @@ store.subscribe(() => {
 ```
 
 위와 같은 예제가 있다면, 더하기 버튼 또는 빼기 버튼을 클릭할 때마다 `subscribe`는 매개변수로 들어온 함수를 실행하게 되는 것이다.
+
+---
+
+그렇다면 위에서 정의한 `Action`을 통해 실제로 컴포넌트에서 `dispatch`로 액션을 사용하여 `store`에 저장된 `state` 값을 바꿔보자.
+
+```jsx
+import { useDispatch, useSelector } from "react-redux";
+import { addCount, minusCount } from "../store";
+
+export default function Home() {
+  const count = useSelector((state) => state.number);
+  const dispatch = useDispatch();
+  return (
+    <div>
+      <h1>Home!</h1>
+      <p>{count}</p>
+      <button
+        onClick={() => {
+          dispatch(addCount());
+        }}
+      >
+        더하기
+      </button>
+      <button
+        onClick={() => {
+          dispatch(minusCount());
+        }}
+      >
+        빼기
+      </button>
+    </div>
+  );
+}
+```
+
+위의 예제는 정의한 액션을 import 해서 해당 컴포넌트에서 액션을 사용할 수 있게 해준 것이고, `dispatch`에 해당 액션을 담아 `action` 객체를 리듀서로 보낸다.
+
+이 때, `dispatch`는 해당 컴포넌트에 store를 import 해서 `store.dispatch`를 사용할 수 도 있지만 리액트에서는 `useDispatch`라는 Hook을 사용하여 더욱 쉽게 리덕스를 사용할 수 있다.
+
+`useSelector` 또한 리액트를 사용할 때 리덕스를 쉽게 사용하게 하는 Hook 중 하나인데, 해당 Hook은 스토어의 상태값을 반환해주는 역할이다. 따라서 `useSelector`는 리덕스 **스토어의 상태 값이 변경된 경우 바뀐 스토어의 상태 값을 다시 가져와 리렌더링을 진행한다.**
