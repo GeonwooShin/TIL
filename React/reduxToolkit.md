@@ -19,3 +19,5 @@
 ```
 $ npm i @reduxjs/toolkit
 ```
+
+### **store 생성**
