@@ -21,3 +21,26 @@ $ npm i @reduxjs/toolkit
 ```
 
 ### **store 생성**
+
+기존 `redux`를 사용했을 때 스토어 생성은 `createStore`을 이용하여 진행했다.
+
+`redux-toolkit`에서는 `configureStore`을 통해 스토어를 생성한다.
+
+리덕스를 통해 개발을 진행할 때 편리한 디버깅을 위해 크롬 익스텐션인 `Redux DevTools`를 설치하는데
+
+기존 `createStore`을 사용하는 경우 이 툴을 사용하기 위해서 `createStore` 인자로 다음과 같이 익스텐션을 추가해 주어야 했다.
+
+```jsx
+const store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+```
+
+하지만 아래와 같이 리덕스 툴킷에서 `configureStore`을 통해 스토어를 생성하면 디폴트로 `Redux DevTools`을 제공한다.
+
+```jsx
+import { configureStore } from "@reduxjs/toolkit";
+
+const store = configureStore({ reducer: rootReducer });
+```
