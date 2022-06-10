@@ -44,3 +44,30 @@ import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({ reducer: rootReducer });
 ```
+
+이렇게 생성한 스토어를 리액트 애플리케이션에 연결해주자.
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import store from "./store";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <Provider store={store}>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </Provider>
+);
+```
+
+### **reducer 등록**
+
+기존 `redux`에서 상태관리를 위해서는 액션을 작성하고, 리듀서에 해당 액션마다의 실행 코드 같은 것들이 필요했다.
+
+하지만, `redux-toolkit`에서는 `createSlice`라는 함수를 통해 액션과 리듀서를 함께 정의하는 것이 가능하다.
