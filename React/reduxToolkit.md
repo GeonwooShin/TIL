@@ -66,8 +66,45 @@ root.render(
 );
 ```
 
-### **reducer 등록**
+### **createAction**
 
-기존 `redux`에서 상태관리를 위해서는 액션을 작성하고, 리듀서에 해당 액션마다의 실행 코드 같은 것들이 필요했다.
+기존 `redux`에서는 액션을 생성하려면 아래와 같이 함수를 정의해야 했다.
 
-하지만, `redux-toolkit`에서는 `createSlice`라는 함수를 통해 액션과 리듀서를 함께 정의하는 것이 가능하다.
+```jsx
+const ADD_COUNT = "ADD_COUNT";
+const MINUS_COUNT = "MINUS_COUNT";
+
+function addCount() {
+  return {
+    type: ADD_COUNT,
+  };
+}
+
+function minusCount() {
+  return {
+    type: MINUS_COUNT,
+  };
+}
+```
+
+하지만 `redux-toolkit`에서는 `createAction` 함수를 통해 액션을 생성한다. 위의 액션을 `redux-toolkit`에서의 액션으로 정의한다면 다음과 같이 정의할 수 있다. 새
+
+```jsx
+import { createAction } from "@reduxjs/toolkit";
+
+const addCount = createAction("ADD_COUNT");
+const minusCount = createAction("MINUS_COUNT");
+
+console.log(addCount());
+console.log(minusCount());
+```
+
+훨씬 간결해진 것을 볼 수 있다. 위의 createAction 함수를 전달 받는 `addCount`와 `minusCount`를 콘솔에 다음과 같이 찍어보면 객체를 반환하는데 이 객체는 `type`과 `payload`를 가진다.
+
+`type`은 `createAction` 함수에 넣어준 인자가 `type`이 되고, 해당 액션을 실행하면서 인자로 넣어준 것이 `payload`로 함께 전달되는 것이다.
+
+이 액션을 가지고 리듀서를 정의해보자.
+
+```jsx
+
+```
