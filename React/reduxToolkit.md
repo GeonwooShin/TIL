@@ -87,7 +87,7 @@ function minusCount() {
 }
 ```
 
-하지만 `redux-toolkit`에서는 `createAction` 함수를 통해 액션을 생성한다. 위의 액션을 `redux-toolkit`에서의 액션으로 정의한다면 다음과 같이 정의할 수 있다. 새
+하지만 `redux-toolkit`에서는 `createAction` 함수를 통해 액션을 생성한다. 위의 액션을 `redux-toolkit`에서의 액션으로 정의한다면 다음과 같이 정의할 수 있다.
 
 ```jsx
 import { createAction } from "@reduxjs/toolkit";
@@ -103,8 +103,17 @@ console.log(minusCount());
 
 `type`은 `createAction` 함수에 넣어준 인자가 `type`이 되고, 해당 액션을 실행하면서 인자로 넣어준 것이 `payload`로 함께 전달되는 것이다.
 
-이 액션을 가지고 리듀서를 정의해보자.
+### **createReducer**
+
+기존 `reducer`에서는 switch문을 사용하여 특정 액션에 해당하는 로직을 구현해야했다. 또한, 이전의 `reducer`는 state의 불변성을 위해 새로운 객체를 만들어서 반환해야했지만, `createReducer`함수를 이용하여 switch문을 제거하여 스스로 액션이 해당 로직을 찾아 실행하도록 하고, 직접 state를 변경하도록 한다. 단, state를 직접 변경 시 return은 금지된다. 해당 작업은 `redux-toolkit`과 `immer`이 대신 해주기 떄문에 걱정하지 않아도 된다.
 
 ```jsx
-
+const reducer = createReducer(0, {
+  [addCount]: (state, action) => {
+    state + 1;
+  },
+  [minusCount]: (state, action) => {
+    state - 1;
+  },
+});
 ```
