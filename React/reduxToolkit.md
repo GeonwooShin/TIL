@@ -20,7 +20,7 @@
 $ npm i @reduxjs/toolkit
 ```
 
-### **store 생성**
+### **configureStore**
 
 기존 `redux`를 사용했을 때 스토어 생성은 `createStore`을 이용하여 진행했다.
 
@@ -117,3 +117,5 @@ const reducer = createReducer(0, {
   },
 });
 ```
+
+### **createSlice**
