@@ -119,3 +119,22 @@ const reducer = createReducer(0, {
 ```
 
 ### **createSlice**
+
+`redux-toolkit`에서는 액션과 리듀서를 따로 생성하지 않고도 `createSlice`라는 API를 통해 `reducer`와 `action`을 한 번에 생성할 수 있다. `createSlice`의 기본 구조는 다음과 같다.
+
+```jsx
+import { createSlice } from "@reduxjs/toolkit";
+
+const newSlice = createSlice({
+  name: "counter",
+  initialState: 0,
+  reducers: {
+    addCount: (state, action) => {
+      state + 1;
+    },
+    minusCount: (state, action) => {
+      state - 1;
+    },
+  },
+});
+```
