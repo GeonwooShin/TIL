@@ -120,7 +120,7 @@ const reducer = createReducer(0, {
 
 ### **createSlice**
 
-`redux-toolkit`에서는 액션과 리듀서를 따로 생성하지 않고도 `createSlice`라는 API를 통해 `reducer`와 `action`을 한 번에 생성할 수 있다. `createSlice`의 기본 구조는 다음과 같다.
+`redux-toolkit`에서는 액션과 리듀서를 따로 생성하지 않고도 `createSlice`라는 API를 통해 `reducer`와 `action`을 한 번에 생성할 수 있다. `createSlice`의 기본 구조는 다음과 같다. 이는 `redux`에서 모듈관리 패턴 중 `ducks-pattern`을 공식적으로 지원하기 위한 것이다.
 
 ```jsx
 import { createSlice } from "@reduxjs/toolkit";
@@ -137,4 +137,12 @@ const newSlice = createSlice({
     },
   },
 });
+```
+
+createSlice의 객체 파라미터 들은 다음과 같이 구성되어있고, 각각은 다음의 의미를 갖는다.
+
+```
+- name : 해당 모듈의 이름
+- initialState : 해당 모듈의 초기 값 세팅
+- reducers : 리듀서 작성, 이 때 해당 리듀서의 키 값을 통해 자동으로 액션 함수가 실행
 ```
