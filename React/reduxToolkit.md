@@ -137,12 +137,47 @@ const newSlice = createSlice({
     },
   },
 });
+
+export const { addCount, minusCount } = newSlice.actions;
 ```
 
-createSlice의 객체 파라미터 들은 다음과 같이 구성되어있고, 각각은 다음의 의미를 갖는다.
+createSlice의 객체 파라미터 들은 다음과 같이 구성되어있고, 각각은 다음의 의미를 갖는다. 또한 해당 액션을 export 해주어 액션이 필요한 컴포넌트에서 각 액션을 import하여 사용할 수 있도록 한다.
 
 ```
 - name : 해당 모듈의 이름
 - initialState : 해당 모듈의 초기 값 세팅
 - reducers : 리듀서 작성, 이 때 해당 리듀서의 키 값을 통해 자동으로 액션 함수가 실행
 ```
+
+이제 해당 리듀서를 store의 리듀서로 다시 설정해주면 다음과 같다.
+
+```jsx
+import { configureStore } from "@reduxjs/toolkit";
+
+const store = configureStore({ reducer: newSlice.reducer });
+```
+
+이제 특정 컴포넌트에서 액션을 수행하는 코드를 만들자.
+
+```jsx
+import { useSelector, useDispatch } from "react-redux";
+import { addCount, minusCount } from "../redux/reducer/reducer";
+
+export default function Header() {
+  const count = useSelector((state) => state);
+  const dispatch = useDispatch();
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={() => dispatch(addCount())}>+</button>
+      <button onClick={() => dispatch(minusCount())}>-</button>
+    </div>
+  );
+}
+```
+
+위와 같이 `action`을 임포트 하여 `dispatch`에 담아 사용할 수 있도록 하고, 이 때, `dispatch`는 해당 컴포넌트에 store를 import 해서 `store.dispatch`를 사용할 수 도 있지만 리액트에서는 `useDispatch`라는 Hook을 사용하여 더욱 쉽게 리덕스를 사용할 수 있다.
+
+`useSelector` 또한 리액트를 사용할 때 리덕스를 쉽게 사용하게 하는 Hook 중 하나인데, 해당 Hook은 스토어의 상태값을 반환해주는 역할이다. 따라서 `useSelector`는 리덕스 **스토어의 상태 값이 변경된 경우 바뀐 스토어의 상태 값을 다시 가져와 리렌더링을 진행한다.**
+
+이 처럼 `redux-toolkit`을 사용하여 보다 간편하고 적은 보일러플레이트로 상태를 관리할 수 있다.
