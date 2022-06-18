@@ -35,3 +35,41 @@ styled(Button)`
   background-color: transparent;
 `;
 ```
+
+이렇게 `styled-components`를 사용하여 적용된 스타일은 네임 스페이스가 글로벌로 지정되지 않기 때문에, 각각의 컴포넌트에서 서로 다른 스타일을 적용하는 것이 가능하다.
+
+### **스타일에 props 적용**
+
+`styled-components`의 가장 큰 장점 중 하나는 props로 어떤 값을 받아오느냐에 따라 다른 스타일을 적용할 수 있다는 것이다.
+
+다음 예시를 보자.
+
+```jsx
+import styled from "styled-components";
+
+export default function Header() {
+  return (
+    <div>
+      <NewButton>Button1</NewButton>
+      <NewButton backgroundColor="green">Button2</NewButton>
+      <NewButton active>Button3</NewButton>
+    </div>
+  );
+}
+
+const NewButton = styled.button`
+  width: 100px;
+  height: 100px;
+  background-color: ${(props) => props.backgroundColor || "yellow"};
+  font-size: 16px;
+  border: 1px solid orange;
+  ${(props) =>
+    props.active &&
+    css`
+      background-color: red;
+      border: 1px solid red;
+    `}
+`;
+```
+
+만약 다른 색상을 가진 버튼을 만들기 위해서 반복적인 `styled-components`를 생성하는 것은 불필요한 행동이기 때문에 위와 같이 props를 통해서 단순하게 바꿔주고 싶은 스타일만 변경하는 것이 가능하다. 또한, 특정 props가 설정됐을 때의 스타일도 따로 지정해주는 것이 가능하다.
