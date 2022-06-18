@@ -6,7 +6,7 @@
 
 이 때, state 또는 props가 변화할 때 마다 함수형 컴포넌트안에 정의된 모든 것들이 재실행된다고 하면 많은 자원의 낭비이기 때문에 이 문제를 `useEffect()`로 해소할 수 있다.
 
-### \*_useState 사용방법_
+### **useState 사용방법**
 
 우선 react 내부에 존재하는 `useEffect`를 import 해야한다.
 
