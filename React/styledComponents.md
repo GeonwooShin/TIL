@@ -73,3 +73,39 @@ const NewButton = styled.button`
 ```
 
 만약 다른 색상을 가진 버튼을 만들기 위해서 반복적인 `styled-components`를 생성하는 것은 불필요한 행동이기 때문에 위와 같이 props를 통해서 단순하게 바꿔주고 싶은 스타일만 변경하는 것이 가능하다. 또한, 특정 props가 설정됐을 때의 스타일도 따로 지정해주는 것이 가능하다.
+
+### **styled-components.attrs**
+
+`styled-components`를 통해 `img`태그의 스타일링을 할 때, alt 속성 값을 넣어주는 과정이 필요할 수 있다. `img` 태그의 `alt` 속성은 해당 이미지를 보여줄 수 없을 때 텍스트로 이미지를 대체할 때 사용되는 값인데, 만약 이미지들이 같은 `alt` 속성을 가지는 이미지들을 스타일링 해야하는 경우, 다음과 같이 동일한 어트리뷰트를 부여하는 것이 가능하다.
+
+```jsx
+const ProductIMG = styled.img.attrs({ alt='상품 이미지' })`
+  width: 100px;
+  height: 80px;
+`
+
+function ItemList() {
+  return (
+    <div>
+      <ProductIMG src="/xxx1">
+      <ProductIMG src="/xxx2">
+      <ProductIMG src="/xxx3">
+    </div>
+  )
+}
+```
+
+### **스타일 상속**
+
+자주 쓰는 css 속성을 변수에 담아 상속받아 재활용 하여 사용하는 것이다.
+
+```jsx
+const defaultColor = css`
+  color: red;
+  background-color: yellow;
+`;
+
+const Button = styled.button`
+  ${defaultColor}
+`;
+```
