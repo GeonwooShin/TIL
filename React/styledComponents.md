@@ -109,3 +109,115 @@ const Button = styled.button`
   ${defaultColor}
 `;
 ```
+
+이렇게 위와 같이 자주 사용되는 css 스타일링을 변수에 담아서 사용하는 것이 가능하다.
+
+### **전역 스타일링**
+
+위에서 설명했을 때, `styled-components`는 **네임 스페이스가 글로벌로 지정되지 않기 때문에, 각각의 컴포넌트에서 서로 다른 스타일을 적용하는 것이 가능하다** 라고 했지만, 때에 따라서 전역적으로 스타일링이 필요한 경우도 있다. 이 때에는 `createGlobalStyle`을 사용하여 프로젝트 전역에 적용하는 css를 만드는 것이 가능하다.
+
+```jsx
+import styled, { createGlobalStyle } from "styled-components";
+
+export const GlobalStyle = createGlobalStyle`
+  * {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-size: 22px;
+    color: red;
+  }
+`;
+```
+
+위와 같이 `createGlobalStyle`을 통해 만든 전역 스타일을 프로젝트 최상단에 추가해주면 일괄적으로 모든 하위 컴포넌트에 해당 스타일이 적용된다.
+
+```jsx
+import { GlobalStyle } from "./style/global";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <Provider store={store}>
+    <React.StrictMode>
+      <App />
+      <GlobalStyle />
+    </React.StrictMode>
+  </Provider>
+);
+```
+
+### **ThemeProvider**
+
+`ThemeProvider`은 `context API`의 작동 방식을 기반으로 하는 것으로, `ThemeProvider`로 감싸져 있는 하위 컴포넌트들은 `ThemeProvider`로 전달된 props를 사용하는 것이 가능하다. 기본적으로 `ThemeProvider`은 theme이라는 props를 전달받는데 이 props는 프로젝트에서 사용할 다양한 스타일링을 포함한 객체로 선언하는 것이 일반적이다.
+
+```jsx
+const fontSizes = {
+  small: "10px",
+  medium: "14px",
+  large: "18px",
+};
+
+const paddings = {
+  small: "10px",
+  medium: "14px",
+  large: "18px",
+};
+
+const margins = {
+  small: "10px",
+  medium: "14px",
+  large: "18px",
+};
+
+export const theme = {
+  fontSizes,
+  paddings,
+  margins,
+};
+```
+
+이렇게 위와 같이 프로젝트 내에서 지켜야할 규격이나 색상 등을 미리 설정해놓은 후
+
+```jsx
+import { ThemeProvider } from "styled-components";
+import { theme } from "./style/projectTheme";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <React.StrictMode>
+        <App />
+        <GlobalStyle />
+      </React.StrictMode>
+    </ThemeProvider>
+  </Provider>
+);
+```
+
+최상위 컴포넌트에 `ThemeProvider`의 `props`로 해당 theme을 import 하여 설정하면 해당 프로젝트의 모든 하위 컴포넌트에서 `props`로 전달 받은 스타일들을 손쉽게 사용하는 것이 가능하다.
+
+```jsx
+export default function Header() {
+  return (
+    <div>
+      <h1>{count}</h1>
+      <NewButton backgroundColor="green">+</NewButton>
+      <NewButton>-</NewButton>
+    </div>
+  );
+}
+
+const NewButton = styled.button`
+  width: 150px;
+  height: 100px;
+  background-color: ${(props) => props.backgroundColor || "yellow"};
+  font-size: ${(props) => props.theme.fontSizes.small};
+  border: 1px solid orange;
+`;
+```
+
+위와 같이 `props.theme.fontSizes.small`은 10px 이기 때문에 font-size는 10px로 설정된다. 이렇게 `ThemeProvider`을 사용하여 프로젝트의 절대적인 규격과 스타일을 설정하여 스타일링을 일관적으로 작성할 수 있도록 도움을 줄 뿐만 아니라, 좀 더 직관적으로 스타일링이 어떻게 설정되어있는지도 확인하는 것이 가능하다.
