@@ -29,6 +29,7 @@ styled.button`
 
 ```jsx
 import styled from "styled-components";
+import Button from "./components/Button";
 
 styled(Button)`
   border: 1px solid black;
