@@ -212,4 +212,234 @@ module.exports = {
 };
 ```
 
+기본적으로 용량이 작거나 사용 빈도가 높은 파일에 대해서는 type을 `asset/inline`으로 지정하여 사용하는 것이 일반적이다. 이는 `webpack`의 기본 asset type을 통해 간단하게 해결할 수 있다.
+
+```js
+const path = require("path");
+
+module.exports = {
+  mode: "development",
+  entry: {
+    main: "./src/app.js",
+  },
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].js",
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        type: "asset",
+      },
+    ],
+  },
+};
+```
+
+위의 예시처럼 type을 `asset`으로 지정하면 기본 조건에 따라서 크기가 `8kb` 미만인 파일에 대해서는 inline 모듈로 처리되고(base64 인코딩), 그 이상의 크기인 파일을 resource 모듈로 처리되기 때문에 크기에 따라 따로 resource 모듈과 inline 모듈을
+지정하지 않아도 된다.
+
+```js
+const path = require("path");
+
+module.exports = {
+  mode: "development",
+  entry: {
+    main: "./src/app.js",
+  },
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].js",
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        type: "asset",
+        parser: {
+          dataUrlCondition: {
+            maxSize: 12 * 1024, // 12kb
+          },
+        },
+      },
+    ],
+  },
+};
+```
+
+혹시나 inline 모듈로 처리될 파일의 최소 크기를 변경하고 싶다면, 위와 같이 `maxSize`를 조절하는 것이 가능하다.
+
 5. **plugins**
+
+위에서 살펴본 loader는 파일을 해석하여 특정 모듈을 변환하는 기능을 담당한다. 반면에, plugin은 번들링 된 파일의 형태를 바꾸는 후속처리 기능을 담당한다. 단, plugin은 생성자 함수로 생성된 객체 인스턴스로만 추가되어야 한다. 이제 자주 사용되는 plugin들을 한 번 살펴보자.
+
+### **BannerPlugin**
+
+`BannerPlugin`은 기본적으로 웹팩이 제공하는 plugin으로 번들링 결과물에 데이터를 기록하기 위해 사용되는 plugin 으로 버전에 따라 올바르게 배포가 되었는지 알아볼 수 있다.
+
+```js
+const path = require("path");
+const webpack = require("webpack");
+const childProcess = require("child-process");
+
+module.exports = {
+  mode: "development",
+  entry: {
+    main: "./src/app.js",
+  },
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].js",
+  },
+  plugins: [
+    new webpack.BannerPlugin({
+      banner: `
+        Build Date: ${new Date().toLocaleString()}
+        Commit Version: ${childProcess.execSync("git rev-parse --short HEAD")}
+        Author: ${childProcess.execSync("git config user.name")}
+      `,
+    }),
+  ],
+};
+```
+
+웹팩에서 기본으로 제공하는 plugin이기 때문에 `require`을 통해 webpack을 받아온다. 생성자 함수로 생성된 `webpack.BannerPlugin`의 속성인 `banner`에는 번들링 결과물에 기록할 데이터를 넣어주고 있다. 위의 예시에는 빌드 시간, 커밋 버전, 작성자 데이터를 넣어주었다.
+
+이 때, 노드에서 제공하는 `child-process`의 `execSync`를 사용하면 인자로 넘긴 문자열의 터미널 명령어를 실행하는 것이 가능하다. 따라서 위 플러그인을 통한 번들링의 결과는 `main.js` 파일 상단에 다음과 같은 주석이 추가된다.
+
+```js
+/*!
+ *
+ *         Build Date: 2022. 6. 27. 오후 10:03:48
+ *         Commit Version: e9390dc
+ *
+ *         Author: GeonwooShin
+ *
+ *
+ */
+/*! 빌드 날짜: 2020. 1. 11. 오전 11:11:06 */
+```
+
+### **DefinePlugin**
+
+애플리케이션 개발에 있어 개발 환경 뿐만 아니라 운영 환경, 로컬 환경과 같은 다양한 환경이 존재한다. 때때로 환경에 따라 API 주소가 다른 경우가 발생하기 때문에 환경에 의존적인 정보는 되도록 `DefinePlugin`으로 관리한다.
+
+```js
+const path = require("path");
+const webpack = require("webpack");
+
+module.exports = {
+  mode: "development",
+  entry: {
+    main: "./src/app.js",
+  },
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].js",
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      "api.domain": JSON.stringify("http://www.xxx.com"),
+    }),
+  ],
+};
+```
+
+`DefinePlugin` 또한 웹팩에서 기본으로 제공하는 플러그인이며, 코드 조각이 아닌 문자를 넘기려면 `JSON.stringify` 함수를 통해 문자열화 한 후 넘긴다. 이렇게 속성으로 넘겨준 키를 `console.log(api.domain)` 해보면 값인 `http://www.xxx.com`이 출력되는 것으로 전역 상수화 되는 것을 알 수 있다.
+
+### **HtmlWebpackPlugin**
+
+`HtmlWebpackPlugin`은 써드파티 라이브러리이므로 `$ npm install html-webpack-plugin`으로 설치한다. 이 plugin은 html 파일이 output에 동적으로 생성된다. 자동으로 html 파일 내부에서 `<script>` 태그로 `main.js`가 추가된다.
+
+```js
+const path = require("path");
+const webpack = require("webpack");
+
+module.exports = {
+  mode: "development",
+  entry: {
+    main: "./src/app.js",
+  },
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].js",
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+    }),
+  ],
+};
+```
+
+`templateParameters` 라는 속성으로 `index.html` 파일 내부에 `<%= key %>`로 되어 있는 부분을 해당 키의 값으로 바꿔주는 것도 가능하다.
+
+```js
+module.exports = {
+  ...
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
+      templateParameters: {
+        key: 'value'
+      }
+    }),
+  ]
+};
+```
+
+`index.html`
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= key %></title>
+  </head>
+  <body></body>
+</html>
+```
+
+빌드 후 생성된 `index.html`
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>value</title>
+  </head>
+  <body></body>
+</html>
+```
+
+위와 같이 변경된 것을 볼 수 있다.
+
+또한, `minify` 속성을 통해 `index.html` 파일의 공백이나 주석을 지우는 것도 가능하다.
+
+### **CleanWebpackPlugin**
+
+`CleanWebpackPlugin`은 이전에 빌드 되었던 결과물을 제거하는 plugin으로, 새로운 빌드 후에도 남아있던 기존 빌드 결과물 때문에, 새로 빌드를 하기 전 수동적으로 빌드 폴더를 지워주는 대신 자동적으로 지워주는 역할을 담당한다.
+
+```js
+const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
+module.exports = {
+  mode: "development",
+  entry: {
+    main: "./src/app.js",
+  },
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].js",
+  },
+  plugins: [new CleanWebpackPlugin()],
+};
+```
+
+`CleanWebpackPlugin`은 써드파티 라이브러리 이므로 `$ npm install clean-webpack-plugin`을 통해 설치한 후 require()을 통해 받아와서 사용하는데 `clean-webpack-plugin`은 `export default` 되어있지 않기 때문에 위와 같이 받아온다.
