@@ -110,3 +110,81 @@ module.exports = {
 그 후 `$ npx babel app.js`를 실행하면 플러그인이 정상적으로 수행되어 코드가 정상적으로 변환된것을 볼 수 있다.
 
 ### **다양한 preset**
+
+위와 같이 애플리케이션의 목적에 따라 다양한 프리셋이 존재한다. `ES6` 코드를 지원하지 않는 브라우저에서 `ES5` 코드로 변환하기 위해서 사용되는 `preset-env`, 리액트에서 사용되는 문법인 `JSX`를 변환하기 위해서는 `preset-react`, `typescript`를 변환하기 위해서는 `preset-typescript`를 사용한다.
+
+`preset-env`를 사용하여 예시를 만들어보자.
+
+`app.js`
+
+```js
+const name = "Johnson";
+const hello = () => {
+  console.log(`Hello my name is ${name}`);
+};
+```
+
+`babel.config.js`
+
+```js
+module.exports = {
+  presets: ["@babel/preset-env"],
+};
+```
+
+위와 같이 `presets` 속성 배열에 사용할 `preset`을 추가해주면 preset 사용이 가능하다. 이제 `$ npx babel app.js`로 babel을 실행시켜주면 다음과 같은 결과를 얻을 수 있다.
+
+```
+const name = "Johnson";
+const hello = () => {
+  console.log(`Hello my name is ${name}`);
+};
+```
+
+`ES6` 문법으로 작성된 기존 `app.js`의 코드가 `ES5` 문법의 코드로 변경된 것을 볼 수 있고, 변환된 코드로 또 알수 있는 것은 `preset-env`의 plugin으로는 `babel/plugin-transfrom-block-scoping`, `babel/plugin-transfrom-template-literals`, `babel/plugin-transfrom-arrow-functions`가 포함되어 있다는 것을 알 수 있다.
+
+### **polyfill**
+
+위와 같이 `ES6` 코드를 `ES5` 코드로 변환하는 것을 보았는데, 만약에 `Promise`와 같이 `ES5` 문법에서는 찾아볼 수 없는 즉, 오래된 브라우저들에서 지원하지 않는 문법들을 지원 가능하도록 추가되는 코드 조각 또는 플러그인을 의미한다.
+
+`$ npm install core-js`를 통해 런타임 폴리필인 `core-js`를 설치 후, polyfill을 추가해보자.
+
+```js
+module.exports = {
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        targets: {
+          ie: "11",
+        },
+        useBuiltIns: "usage",
+        corejs: {
+          version: 3,
+        },
+      },
+    ],
+  ],
+};
+```
+
+### **웹팩과 통합**
+
+실무에서는 일반적으로 위에서 설정한 `babel`을 웹팩에 통합해서 사용한다. 이 때 필요한 것이 바로 `babel-loader`이다. 웹팩에서는 다양한 로더들이 사용되고, `babel-loader`는 `js` 파일에 사용되는 로더로, `ES6` 문법으로 작성된 해당 `js` 파일을 `ES5` 문법으로 변환하여 번들링 처리를 하는 과정이다.
+
+```js
+module.exports = {
+  ...
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: "babel-loader",
+        exclude: /node_modules/,
+      },
+    ],
+  },
+};
+```
+
+위와 같이 설정 후 `exclude` 속성에 `/node_modules/`를 지정해준다.
