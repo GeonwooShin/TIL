@@ -2,7 +2,7 @@
 
 JSX는 자바스크립트와 XML을 추가한 문법으로 자바스크립트의 확장 문법이다.
 
-JSX는 자바스크립트 트랜스파일러인 Babel을 필요로하는데, Babel은 일반적인 자바스크립트 문법이 아닌 JSX를 자바스크립트 문법으로 변환시켜준다.
+JSX는 자바스크립트 트랜스파일러인 Babel을 필요로하는데, [Babel](https://github.com/GeonwooShin/TIL/blob/master/Tools/babel.md)은 일반적인 자바스크립트 문법이 아닌 JSX를 자바스크립트 문법으로 변환시켜주는 역할을 수행할 수 있다.
 
 ```js
 import React from "react";
