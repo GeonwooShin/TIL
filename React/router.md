@@ -189,7 +189,13 @@ export default function User() {
 
 ---
 
-쿼리는 `useLocation`을 통해서 전달 받을 수 있다. 다음 예제를 보자.
+쿼리는 일반적으로 물음표 다음에 오는 것으로 쿼리는 `key = value` 형태를 띈다. 또한 쿼리가 여러개라면 `&`를 통해 추가적인 쿼리를 전달하는 것이 가능하다. 예시를 보자면 다음과 같다.
+
+`www.xxxxx.com/about?details=true&q=true`
+
+위의 예시로는 `details=true`, `q=true`라는 두 개의 쿼리가 존재한다는 것을 알 수 있다. 또한 쿼리는 url 경로에 어떠한 영향도 미치지 않는다.
+
+이 쿼리는 라우터에서 `useLocation`을 통해서 전달 받을 수 있다. 다음 예제를 보자.
 
 `About` 컴포넌트에서 location 이라는 변수에 `useLocation`객체를 받고 있다.
 
@@ -243,6 +249,47 @@ export default function About() {
 ```
 
 만약 접속한 주소가 `https://www.xxxxx.com/About?details=true` 라면 `location`의 `search`의 값은 `?detail=true` 일 것이고, 이 쿼리스트링을 사용하기 위해서 `qs` 라이브러리의 도움을 받아 출력한 `queryData`는 `{detail: true}` 라는 데이터를 가질 것이다.
+
+### **useSearchParams**
+
+추가적으로 쿼리를 읽어오는 방법으로는 `react-router-dom`에서 제공하는 `useSearchParams`가 있다.
+
+url이 `http://localhost:3000/About/123?detail=true&page=3` 라고 가정하고, 다음 예시를 보자.
+
+```jsx
+import { useSearchParams } from "react-router-dom";
+
+export default function User() {
+  const [query, setQuery] = useSearchParams();
+  const page = query.get("page");
+  return (
+    <div>
+      <h1>{page}</h1>
+    </div>
+  );
+}
+```
+
+위에서 사용되는 `get` 메서드로 쿼리의 키 값을 인자로 넣어주게 되면, 키에 해당하는 value 값을 받아오는 것이 가능하다. 따라서 위에서 가정한 url의 쿼리 중 `page`에 해당하는 value 값은 `3`이기 때문에 `3`을 받아오는 것이 가능하다.
+
+또한, `setQuery` 함수를 통해서 쿼리의 값을 변경하는 것도 가능하다.
+
+```jsx
+import { useSearchParams } from "react-router-dom";
+
+export default function User() {
+  const [query, setQuery] = useSearchParams();
+  const page = query.get("page");
+  return (
+    <div>
+      <h1>{query.get("page")}</h1>
+      <button onClick={() => setQuery({ page: 5 })}>쿼리 바꾸기</button>
+    </div>
+  );
+}
+```
+
+위에서 `page`에 해당하는 쿼리 value를 받아와서 변수에 저장해 놓은 후 `setQuery` 함수를 통해 해당 쿼리의 값을 `5`로 바꿔주는 과정이다.
 
 ---
 
