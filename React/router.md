@@ -371,3 +371,62 @@ export default function SignIn() {
 위의 예시에서 인자로 넣어준 -1의 값은 뒤로 1페이지 이동을 의미한다.
 
 ---
+
+### **Redirect**
+
+위에서 살펴본 react-router-dom의 다양한 라우터 이동 방식과 더불어 react-router-dom 에서는 `Redirect`를 구현하는 것도 가능하다.
+
+`Redirect`라는 것은 브라우저가 특정 URL을 웹 서버에 요청했을 때, 웹 서버가 다른 URL을 지시하는 것을 뜻한다. 예를 들어 설명해보자면, 내가 만약 `www.xxxx.com/user`라는 곳에 가려고 했을때, 서버가 `www.xxxx.com/login`이라는 다른 url을 지시하는 경우이다.
+
+```jsx
+import { Routes, Route, Navigate } from "react-router-dom";
+export default function App() {
+  return (
+    <div>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/user" element={<User />} />
+      </Routes>
+    </div>
+  );
+}
+```
+
+일반적으로 `User` 페이지로 가기 위해서는 로그인이 완료되어있는 상태일 때 갈 수 있을 것이다. 따라서, 위와 같이 라우터가 설정 되어있다면, 로그인이 되어있지 않아도 `User` 페이지로 이동할 수 있는 말도 안되는 일이 발생할 것이다.
+
+따라서, `Redirect`를 통해 로그인 상태에 따라 로그인이 되어있다면 `User` 페이지로, 로그인이 되어있지 않다면 `Login` 페이지로 이동시켜보도록 하자.
+
+`App.js`
+
+```jsx
+import { Routes, Route } from "react-router-dom";
+import RedirectPage from "./pages/RedirectPage";
+
+export default function App() {
+  return (
+    <div>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/user" element={<RedirectPage />} />
+      </Routes>
+    </div>
+  );
+}
+```
+
+`RedirectPage.jsx`
+
+```jsx
+import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
+import User from "./User";
+
+const RedirectPage = () => {
+  const [authenticate, setAuthenticate] = useState(false);
+  return authenticate === true ? <User /> : <Navigate to="/login" />;
+};
+
+export default RedirectPage;
+```
+
+위와 같이 `RedirectPage` 라는 리다이렉트 관련 컴포넌트를 하나 만들어주었다. URL 경로 `/user`에 해당하는 컴포넌트를 `RedirectPage`로 설정해두고, 만약 `authenticate`라는 값이 `true`이면 `User` 컴포넌트를 보여주고 `false`라면 `Login` 컴포넌트로 이동시킨다. 이렇게 권한에 따른 웹 서버의 응답을 처리해주는 것이 가능하다.
