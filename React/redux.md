@@ -146,6 +146,10 @@ function minusCount() {
 리듀서는 액션의 `type`에 따라 그에 맞는 변화를 일으키는 함수이다. 첫 번째 인자로는 초기 상태 값을, 두 번째 인자로는 전달 받은 액션 객체를 받는다.
 
 ```jsx
+const initialState = {
+  number: 0,
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_COUNT:
